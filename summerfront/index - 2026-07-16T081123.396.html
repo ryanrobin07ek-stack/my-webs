@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summer Front — Catering & Reservations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  :root{
+    --cream:#FBF6EA;
+    --ink:#16241C;
+    --lime:#B7CC3B;
+    --teal:#1F5C56;
+    --coral:#FF6B4A;
+    --line:#E4DCC6;
+    --white:#FFFFFF;
+    --radius:14px;
+    --shadow: 0 10px 30px rgba(22,36,28,0.10);
+    --serif:'Fraunces', serif;
+    --sans:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  h1,h2,h3{font-family:var(--serif); font-weight:600; letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:var(--sans); font-weight:700; font-size:12px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--teal);
+  }
+
+  /* Front divider - the wavy signature bit */
+  .front-divider{ height:56px; width:100%; position:relative; overflow:hidden; }
+  .front-divider svg{ width:100%; height:100%; display:block; }
+
+  /* Nav bar */
+  header{
+    position:sticky; top:0; z-index:50; background:rgba(251,246,234,0.92);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+  }
+  nav{display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1180px; margin:0 auto;}
+  .logo{font-family:var(--serif); font-weight:700; font-size:22px; display:flex; align-items:center; gap:8px;}
+  .logo .dot{width:10px; height:10px; border-radius:50%; background:var(--coral); display:inline-block;}
+  .nav-links{display:flex; gap:30px; align-items:center;}
+  .nav-links a{font-size:14.5px; font-weight:600; color:var(--ink); opacity:0.8; transition:opacity .15s;}
+  .nav-links a:hover{opacity:1;}
+  .nav-actions{display:flex; gap:10px; align-items:center;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:12px 22px; border-radius:999px; font-weight:700; font-size:14px;
+    border:1.5px solid transparent; transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{ background:var(--ink); color:var(--white); }
+  .btn-primary:hover{ box-shadow:0 6px 18px rgba(22,36,28,0.28); }
+  .btn-coral{ background:var(--coral); color:var(--white); }
+  .btn-coral:hover{ box-shadow:0 6px 18px rgba(255,107,74,0.4); }
+  .btn-outline{ background:transparent; color:var(--ink); border-color:var(--ink); }
+  .btn-outline:hover{ background:var(--ink); color:var(--white); }
+  .btn-ghost{ background:transparent; color:var(--ink); padding:10px 16px; font-size:14px;}
+  .btn-sm{padding:9px 16px; font-size:13px;}
+  .menu-toggle{display:none; background:none; border:none; font-size:24px;}
+
+  /* Hero section */
+  .hero{ padding:64px 0 40px; }
+  .hero-grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center;}
+  .hero h1{ font-size:clamp(38px,5.4vw,64px); line-height:1.02; margin:16px 0 20px;}
+  .hero h1 em{ font-style:italic; color:var(--teal); }
+  .hero p{ font-size:18px; max-width:460px; opacity:0.82; margin-bottom:30px;}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
+  .hero-art{position:relative;}
+  .hero-art img{ border-radius:24px; box-shadow:var(--shadow); width:100%; height:520px; object-fit:cover;}
+  .hero-badge{
+    position:absolute; bottom:-24px; left:-24px; background:var(--white); border-radius:16px;
+    padding:16px 20px; box-shadow:var(--shadow); display:flex; gap:12px; align-items:center; max-width:230px;
+  }
+  .hero-badge .num{font-family:var(--serif); font-size:26px; font-weight:700; color:var(--coral);}
+  .hero-badge .lbl{font-size:12px; opacity:0.7; font-weight:600;}
+
+  /* Order food banner (added this in phase 1) */
+  .order-banner{
+    display:block;
+    position:relative;
+    width:100%;
+    height:220px;
+    border-radius:20px;
+    overflow:hidden;
+    margin:20px 0 40px 0;
+    box-shadow:var(--shadow);
+    transition:transform .2s ease;
+  }
+  .order-banner:hover{
+    transform:scale(1.01);
+  }
+  .order-banner img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:brightness(0.55);
+  }
+  .order-banner-content{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:var(--white);
+    text-align:center;
+    padding:20px;
+    z-index:2;
+  }
+  .order-banner-content h2{
+    font-size:42px;
+    font-weight:700;
+    color:var(--white);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    margin-bottom:8px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  .order-banner-content p{
+    font-size:16px;
+    opacity:0.9;
+    font-weight:500;
+  }
+
+  /* How it works / steps */
+  .section{ padding:70px 0; }
+  .section-head{ max-width:600px; margin-bottom:44px;}
+  .section-head h2{ font-size:clamp(28px,3.6vw,42px); margin-top:10px;}
+  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .step-card{ background:var(--white); border-radius:var(--radius); padding:28px; border:1px solid var(--line);}
+  .step-num{
+    width:34px; height:34px; border-radius:50%; background:var(--lime); color:var(--ink);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-family:var(--serif); margin-bottom:16px;
+  }
+  .step-card h3{ font-size:19px; margin-bottom:8px;}
+  .step-card p{ font-size:14.5px; opacity:0.75;}
+
+  /* Format cards */
+  .formats{ display:grid; grid-template-columns:1fr 1fr; gap:26px;}
+  .format-card{ background:var(--white); border-radius:20px; overflow:hidden; border:1px solid var(--line); display:flex; flex-direction:column;}
+  .format-card img{ height:230px; object-fit:cover; width:100%;}
+  .format-body{ padding:26px;}
+  .format-body .eyebrow{color:var(--coral);}
+  .format-body h3{ font-size:23px; margin:8px 0 10px;}
+  .format-body p{ font-size:14.5px; opacity:0.78; margin-bottom:18px;}
+  .format-actions{display:flex; gap:10px; flex-wrap:wrap;}
+
+  /* Occasions section */
+  .occasions{ display:flex; flex-wrap:wrap; gap:12px;}
+  .occasion-pill{
+    padding:10px 18px; border-radius:999px; background:var(--white); border:1px solid var(--line);
+    font-size:14px; font-weight:600;
+  }
+
+  /* Feature highlights */
+  .features{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px;}
+  .feature{ text-align:left;}
+  .feature .icon{ font-size:26px; margin-bottom:14px;}
+  .feature h3{ font-size:16.5px; margin-bottom:6px;}
+  .feature p{ font-size:13.5px; opacity:0.72;}
+
+  /* Reservation block */
+  .reserve-section{ background:var(--ink); color:var(--cream); border-radius:28px; margin:0 28px; padding:56px 44px;}
+  .reserve-section .wrap{padding:0; max-width:none;}
+  .reserve-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:48px; align-items:flex-start;}
+  .reserve-section h2{ color:var(--cream); font-size:clamp(28px,3.4vw,38px);}
+  .reserve-section .eyebrow{ color:var(--lime);}
+  .reserve-section p{ opacity:0.78; margin:14px 0 22px; font-size:15px; max-width:400px;}
+  .avail-strip{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;}
+  .avail-chip{ font-size:12.5px; padding:6px 12px; border-radius:999px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16);}
+  .avail-chip.full{ opacity:0.45; text-decoration:line-through;}
+
+  .form-card{ background:var(--cream); border-radius:20px; padding:28px; color:var(--ink);}
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;}
+  .field{ display:flex; flex-direction:column; gap:6px;}
+  .field.full{ grid-column:1 / -1;}
+  label{ font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; opacity:0.65;}
+  input, select, textarea{
+    padding:12px 14px; border-radius:10px; border:1.5px solid var(--line); background:var(--white);
+    font-family:var(--sans); font-size:14.5px; color:var(--ink);
+  }
+  input:focus, select:focus, textarea:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+  textarea{ resize:vertical; min-height:70px;}
+  .form-foot{ display:flex; align-items:center; justify-content:space-between; margin-top:6px; gap:14px; flex-wrap:wrap;}
+  .form-note{ font-size:12.5px; opacity:0.6;}
+  .confirm-box{
+    margin-top:16px; padding:16px; border-radius:12px; background:rgba(183,204,59,0.18); border:1px solid var(--lime);
+    font-size:14px; display:none;
+  }
+  .confirm-box.show{ display:block; }
+  .confirm-box b{ font-family:var(--serif); font-size:16px;}
+
+  /* FAQ */
+  .faq-item{ border-bottom:1px solid var(--line); padding:18px 0;}
+  .faq-q{ display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-weight:600; font-size:16px;}
+  .faq-q .plus{ font-size:20px; transition:transform .2s; color:var(--coral);}
+  .faq-item.open .plus{ transform:rotate(45deg);}
+  .faq-a{ max-height:0; overflow:hidden; transition:max-height .25s ease; font-size:14.5px; opacity:0.78;}
+  .faq-item.open .faq-a{ max-height:200px; padding-top:12px;}
+
+  /* Newsletter signup */
+  .newsletter{ background:var(--white); border-radius:24px; padding:48px; text-align:center; border:1px solid var(--line);}
+  .newsletter h2{ font-size:clamp(24px,3vw,32px); margin-bottom:10px;}
+  .newsletter p{ opacity:0.72; margin-bottom:24px;}
+  .nl-form{ display:flex; gap:10px; max-width:420px; margin:0 auto; flex-wrap:wrap; justify-content:center;}
+  .nl-form input{ flex:1; min-width:220px; padding:13px 16px; border-radius:999px; border:1.5px solid var(--line);}
+  .nl-msg{ margin-top:12px; font-size:13.5px; font-weight:600;}
+
+  /* Careers banner (phase 1 addition) */
+  .chef-banner{ position:relative; border-radius:24px; height:350px; margin:40px 0 10px; overflow:hidden; display:block; text-decoration:none;}
+  .chef-banner:hover img{ transform: scale(1.02); }
+  .chef-banner img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.55); z-index:1; transition:transform 0.4s ease;}
+  .chef-content{ position:relative; z-index:2; max-width:550px; color:var(--white); padding:50px;}
+  .chef-content h2{ font-size:44px; margin-bottom:12px; color:var(--white);}
+  .chef-content p{ font-size:16px; opacity:0.9; margin-bottom:24px; line-height:1.6;}
+  @media (max-width:900px){ .chef-content{ padding:30px; } }
+  @media (max-width:600px){ .chef-banner{ height:350px; } .chef-content h2{ font-size:32px; } }
+
+  /* Footer */
+  footer{ padding:60px 0 30px; border-top:1px solid var(--line); margin-top:40px;}
+  .foot-grid{ display:grid; grid-template-columns:1.4fr repeat(3,1fr); gap:30px; margin-bottom:40px;}
+  .foot-col h4{ font-size:13px; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px; opacity:0.6;}
+  .foot-col a, .foot-col p{ display:block; font-size:14px; margin-bottom:10px; opacity:0.8;}
+  .foot-bottom{ display:flex; justify-content:space-between; font-size:13px; opacity:0.55; flex-wrap:wrap; gap:10px;}
+
+  /* Generic modal styles */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(22,36,28,0.55); display:none; align-items:center; justify-content:center;
+    z-index:100; padding:20px;
+  }
+  .modal-overlay.show{ display:flex; }
+  .modal{ background:var(--cream); border-radius:20px; padding:32px; width:100%; max-width:400px; position:relative;}
+  .modal-close{ position:absolute; top:16px; right:18px; font-size:20px; background:none; border:none;}
+  .modal h3{ font-size:22px; margin-bottom:6px;}
+  .modal .sub{ font-size:13.5px; opacity:0.65; margin-bottom:20px;}
+  .modal .field{ margin-bottom:14px;}
+  .modal-switch{ font-size:13.5px; text-align:center; margin-top:16px; opacity:0.75;}
+  .modal-switch a{ color:var(--coral); font-weight:700;}
+  .modal-error{ font-size:13px; color:var(--coral); font-weight:600; margin-top:-6px; margin-bottom:10px; display:none;}
+  .modal-error.show{ display:block;}
+
+  .toast{
+    position:fixed; bottom:24px; right:24px; background:var(--ink); color:var(--cream); padding:16px 20px;
+    border-radius:12px; font-size:14px; font-weight:600; box-shadow:var(--shadow); z-index:200;
+    transform:translateY(120%); transition:transform .3s ease; max-width:320px;
+  }
+  .toast.show{ transform:translateY(0); }
+
+  .user-pill{ display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:700; }
+  .user-pill .avatar{ width:28px; height:28px; border-radius:50%; background:var(--teal); color:var(--white); display:flex; align-items:center; justify-content:center; font-size:12px;}
+
+  /* Floating cart button */
+  .cart-btn{ position:relative; background:none; border:none; font-size:19px; padding:8px; display:flex; }
+  .cart-badge{
+    position:absolute; top:0; right:0; background:var(--coral); color:var(--white); font-size:10.5px; font-weight:800;
+    width:17px; height:17px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  }
+  .cart-btn.bounce{ animation:cartBounce .4s ease; }
+  @keyframes cartBounce{ 0%{transform:scale(1);} 35%{transform:scale(1.28) rotate(-8deg);} 60%{transform:scale(0.94);} 100%{transform:scale(1);} }
+
+  /* 'Order now' modal */
+  .order-toggle{ display:flex; background:var(--white); border:1.5px solid var(--line); border-radius:999px; padding:4px; gap:4px;}
+  .toggle-btn{ flex:1; border:none; background:none; padding:10px; border-radius:999px; font-weight:700; font-size:13.5px; color:var(--ink); opacity:0.55; transition:all .2s;}
+  .toggle-btn.active{ background:var(--ink); color:var(--white); opacity:1;}
+  .spinner{
+    width:20px; height:20px; border-radius:50%; border:3px solid var(--line); border-top-color:var(--teal);
+    animation:spin .7s linear infinite; margin:18px auto;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .store-card{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--white);
+    border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:10px;
+    opacity:0; animation:storeIn .35s ease forwards;
+  }
+  .store-card:nth-child(2){ animation-delay:.08s; }
+  .store-card:nth-child(3){ animation-delay:.16s; }
+  @keyframes storeIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+  .store-status{ display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:var(--teal); margin-top:3px;}
+  .status-dot{ width:8px; height:8px; border-radius:50%; background:#3AAE6A; animation:dotPulse 1.6s ease-in-out infinite;}
+  @keyframes dotPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(58,174,106,0.5);} 50%{ box-shadow:0 0 0 6px rgba(58,174,106,0);} }
+  .store-name{ font-weight:700; font-size:14.5px;}
+  .store-meta{ font-size:12.5px; opacity:0.65;}
+
+  /* Featured image block */
+  .menu-item img{
+    width:100%;
+    height:170px;
+    object-fit:cover;
+    border-radius:14px 14px 0 0;
+  }
+
+  /* Menu + scrollspy nav */
+  .menu-catnav{
+    position:sticky; top:65px; z-index:30; display:flex; gap:26px; background:var(--cream); padding:14px 0;
+    border-bottom:1px solid var(--line); overflow-x:auto;
+  }
+  .cat-link{
+    background:none; border:none; font-weight:700; font-size:14.5px; color:var(--ink); opacity:0.5; padding:6px 2px;
+    border-bottom:2.5px solid transparent; white-space:nowrap; transition:all .2s;
+  }
+  .cat-link.active{ opacity:1; color:var(--teal); border-bottom-color:var(--coral); }
+  .menu-filters{ display:flex; gap:10px; flex-wrap:wrap; margin:20px 0 8px;}
+  .filter-pill{
+    padding:8px 16px; border-radius:999px; background:var(--white); border:1.5px solid var(--line);
+    font-size:13px; font-weight:700; transition:all .2s;
+  }
+  .filter-pill.active{ background:var(--teal); border-color:var(--teal); color:var(--white); }
+  .menu-category{ padding-top:34px; scroll-margin-top:130px; }
+  .menu-category h3{ font-size:22px; margin-bottom:16px; }
+  .menu-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  .menu-item{
+    background:var(--white); border-radius:14px; border:1px solid var(--line); overflow:hidden;
+    transition:transform .18s ease, box-shadow .18s ease; cursor:pointer;
+  }
+  .menu-item:hover{ transform:translateY(-5px); box-shadow:var(--shadow); }
+  .menu-item-body{ padding:16px; }
+  .menu-item-body h4{ font-size:15.5px; margin-bottom:4px; font-family:var(--serif); }
+  .menu-item-body p{ font-size:13px; opacity:0.6; margin-bottom:12px; }
+  .menu-item-foot{ display:flex; align-items:center; justify-content:space-between; }
+  .menu-item-foot .price{ font-weight:800; font-size:14.5px; color:var(--teal); }
+  .menu-item.hide{ display:none; }
+  .menu-item.fading{ opacity:0; transform:scale(0.94); }
+
+  /* Slide-out panels for builder & cart */
+  .panel-overlay{
+    position:fixed; inset:0; background:rgba(22,36,28,0.5); z-index:120; display:none;
+  }
+  .panel-overlay.show{ display:block; }
+  .side-panel{
+    position:fixed; top:0; right:0; height:100%; width:420px; max-width:92vw; background:var(--cream);
+    box-shadow:-12px 0 40px rgba(22,36,28,0.25); transform:translateX(100%); transition:transform .32s cubic-bezier(.2,.9,.3,1);
+    z-index:121; overflow-y:auto; padding:28px;
+  }
+  .side-panel.show{ transform:translateX(0); }
+  .builder-step{ margin:22px 0; }
+  .builder-step h4{ font-size:14.5px; display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
+  .step-hint{ font-size:11.5px; font-weight:600; opacity:0.55; text-transform:none; }
+  .option-list{ display:flex; flex-wrap:wrap; gap:8px; }
+  .option-pill{
+    display:flex; align-items:center; gap:6px; padding:9px 14px; border-radius:999px; border:1.5px solid var(--line);
+    background:var(--white); font-size:13px; font-weight:600; transition:all .15s;
+  }
+  .option-pill.selected{ background:var(--lime); border-color:var(--lime); }
+  .option-pill .badge{
+    display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; border-radius:50%;
+    background:var(--teal); color:var(--white); font-size:10px; font-weight:800; transform:scale(0); transition:transform .18s;
+  }
+  .option-pill.selected .badge{ transform:scale(1); animation:badgePop .3s ease; }
+  @keyframes badgePop{ 0%{transform:scale(0);} 60%{transform:scale(1.3);} 100%{transform:scale(1);} }
+  .builder-tip{
+    font-size:12.5px; background:rgba(255,107,74,0.12); border:1px solid var(--coral); color:var(--coral);
+    padding:10px 12px; border-radius:10px; opacity:0; transition:opacity .25s; margin-top:6px;
+  }
+  .builder-tip.show{ opacity:1; }
+  .builder-footer{
+    position:sticky; bottom:-28px; margin:24px -28px -28px; padding:18px 28px; background:var(--white);
+    border-top:1px solid var(--line);
+  }
+  .builder-stats{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px;}
+  .builder-price{ font-family:var(--serif); font-size:26px; font-weight:700; transition:color .2s; }
+  .builder-price.flash{ color:var(--coral); }
+  .builder-cal{ font-size:12.5px; opacity:0.6; font-weight:600; }
+
+  .cart-item{ display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+  .cart-item-body{ flex:1; }
+  .cart-item-body h4{ font-size:14.5px; margin-bottom:3px; font-family:var(--serif); }
+  .cart-item-body p{ font-size:12px; opacity:0.6; }
+  .cart-item-price{ font-weight:800; font-size:14px; white-space:nowrap; }
+  .cart-item-del{
+    background:var(--coral); color:var(--white); border:none; border-radius:8px; font-size:11px; font-weight:700;
+    padding:5px 9px; margin-top:8px; opacity:0.9;
+  }
+  .cart-total-row{ display:flex; justify-content:space-between; font-family:var(--serif); font-size:19px; font-weight:700; margin-bottom:14px;}
+  .cart-empty{ text-align:center; opacity:0.55; font-size:14px; padding:40px 0; }
+
+  @media (max-width: 900px){
+    .nav-links{ display:none; }
+    .nav-links.mobile-open{ display:flex; flex-direction:column; position:absolute; top:100%; left:0; right:0; background:var(--cream); padding:20px 28px; border-bottom:1px solid var(--line); box-shadow:var(--shadow); gap:16px; z-index:60;}
+    .menu-toggle{ display:block; }
+    .hero-grid{ grid-template-columns:1fr;}
+    .hero-art{ order:-1; }
+    .hero-art img{ height:320px;}
+    .steps, .formats, .features{ grid-template-columns:1fr; }
+    .reserve-grid{ grid-template-columns:1fr;}
+    .form-row{ grid-template-columns:1fr;}
+    .foot-grid{ grid-template-columns:1fr 1fr;}
+    .reserve-section{ margin:0 14px; padding:36px 22px;}
+    .menu-grid{ grid-template-columns:1fr 1fr;}
+    .side-panel{ width:100%; max-width:100%; padding:22px;}
+    .builder-footer{ margin:24px -22px -22px; padding:16px 22px;}
+    .menu-catnav{ top:64px; }
+  }
+  @media (max-width: 560px){
+    .menu-grid{ grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span class="dot"></span>Summer Front</div>
+    <div class="nav-links">
+      <a href="#menu">Order</a>
+      <a href="menu.html">Full Menu</a>
+      <a href="locations.html">Locations</a>
+      <a href="careers.html">Careers</a>
+      <a href="#catering">Catering</a>
+      <a href="#reserve">Reservations</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-coral btn-sm" onclick="openOrderModal()">Order now</button>
+      <button class="cart-btn" id="cartBtn" onclick="openCart()" aria-label="Open cart">
+        🛍️<span class="cart-badge" id="cartBadge">0</span>
+      </button>
+      <div id="authArea">
+        <button class="btn btn-ghost btn-sm" onclick="openModal('login')">Log in</button>
+        <button class="btn btn-primary btn-sm" onclick="openModal('signup')">Sign up</button>
+      </div>
+      <button class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open')">☰</button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Fresh · Local · Made to share</span>
+      <h1>Catering that feels<br>like <em>summer</em>, every<br>day of the year.</h1>
+      <p>Bowls, boards, and buffet-style spreads made from scratch each morning — plus a dining room you can reserve for the ones you love.</p>
+      <div class="hero-actions">
+        <button class="btn btn-coral" onclick="document.getElementById('catering').scrollIntoView()">Start a catering order</button>
+        <button class="btn btn-outline" onclick="document.getElementById('reserve').scrollIntoView()">Reserve a table</button>
+      </div>
+    </div>
+    <div class="hero-art">
+      <img src="https://images.unsplash.com/photo-1768291787818-dc12e35bf149?auto=format&fit=crop&w=900&q=80" alt="Table set outdoors in dappled summer light">
+      <div class="hero-badge">
+        <span class="num">4.9</span>
+        <span class="lbl">Average rating across 1,200+ catered events</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="front-divider"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 C300,70 400,-10 700,30 C900,55 1000,10 1200,35 L1200,60 L0,60 Z" fill="#B7CC3B" opacity="0.5"></path><path d="M0,40 C250,10 500,55 750,25 C950,2 1050,45 1200,20 L1200,60 L0,60 Z" fill="#1F5C56" opacity="0.35"></path></svg></div>
+
+<div class="wrap">
+  <a href="menu.html" class="order-banner">
+    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1500&q=80" alt="Delicious fresh food row image banner">
+    <div class="order-banner-content">
+      <h2>Order Food</h2>
+      <p>Select your favorite salads, fresh warm bowls, or sides now</p>
+    </div>
+  </a>
+</div>
+
+<section id="menu">
+  <div class="wrap">
+    <div class="section-head" style="margin-bottom:20px;">
+      <span class="eyebrow">Order online</span>
+      <h2>Build your bowl</h2>
+    </div>
+  </div>
+  <div class="menu-catnav wrap" id="menuCatNav">
+    <button class="cat-link active" data-cat="warm" onclick="scrollToCat('warm')">Warm Bowls</button>
+    <button class="cat-link" data-cat="salads" onclick="scrollToCat('salads')">Salads</button>
+    <button class="cat-link" data-cat="sides" onclick="scrollToCat('sides')">Sides</button>
+  </div>
+  <div class="wrap">
+    <div class="menu-filters" id="menuFilters">
+      <button class="filter-pill" data-filter="gf" onclick="toggleFilter('gf', this)">Gluten-Free</button>
+      <button class="filter-pill" data-filter="vegan" onclick="toggleFilter('vegan', this)">Vegan</button>
+      <button class="filter-pill" data-filter="under500" onclick="toggleFilter('under500', this)">Under 500 Cal</button>
+    </div>
+
+    <div class="menu-category" id="cat-warm">
+      <h3>Warm Bowls</h3>
+      <div class="menu-grid">
+        <div class="menu-item" data-tags="gf" onclick="openBuilder('Harvest Wild Rice Bowl', 10.50)">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" alt="Harvest Wild Rice Bowl">
+          <div class="menu-item-body">
+            <h4>Harvest Wild Rice Bowl</h4>
+            <p>Warm wild rice, massaged kale, sweet apples, roasted sweet potato, raw goat cheese, pecans, and balsamic.</p>
+            <div class="menu-item-foot">
+              <span class="price">$10.50</span>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openBuilder('Harvest Wild Rice Bowl', 10.50)">Customize</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-item" data-tags="gf vegan under500" onclick="openBuilder('Spicy Quinoa Crunch Bowl', 11.25)">
+          <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80" alt="Spicy Quinoa Crunch Bowl">
+          <div class="menu-item-body">
+            <h4>Spicy Quinoa Crunch Bowl</h4>
+            <p>Warm organic quinoa, baby spinach, roasted broccoli, raw carrots, cucumbers, crisp onions, sesame ginger oil.</p>
+            <div class="menu-item-foot">
+              <span class="price">$11.25</span>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openBuilder('Spicy Quinoa Crunch Bowl', 11.25)">Customize</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-category" id="cat-salads">
+      <h3>Salads</h3>
+      <div class="menu-grid">
+        <div class="menu-item" data-tags="gf vegan under500" onclick="openBuilder('Classic Garden Avocado Salad', 9.50)">
+          <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80" alt="Classic Garden Avocado Salad">
+          <div class="menu-item-body">
+            <h4>Classic Garden Avocado Salad</h4>
+            <p>Crisp chopped romaine, avocado chunks, red onions, grape tomatoes, cucumbers, creamy tahini drizzle.</p>
+            <div class="menu-item-foot">
+              <span class="price">$9.50</span>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openBuilder('Classic Garden Avocado Salad', 9.50)">Customize</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-item" data-tags="gf" onclick="openBuilder('Tuscan Kale & Feta Salad', 10.00)">
+          <img src="https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=600&q=80" alt="Tuscan Kale & Feta Salad">
+          <div class="menu-item-body">
+            <h4>Tuscan Kale & Feta Salad</h4>
+            <p>Premium Tuscan kale, Greek feta, sun-dried tomatoes, toasted pine nuts, artisan olive oil and lemon twist.</p>
+            <div class="menu-item-foot">
+              <span class="price">$10.00</span>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openBuilder('Tuscan Kale & Feta Salad', 10.00)">Customize</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-item" data-tags="vegan" onclick="openBuilder('Citrus Sunshine Salad', 9.95)">
+          <img src="https://images.unsplash.com/photo-1623428187969-5da2d87f0bc9?auto=format&fit=crop&w=600&q=80" alt="Citrus Sunshine Salad">
+          <div class="menu-item-body">
+            <h4>Citrus Sunshine Salad</h4>
+            <p>Mixed microgreens, sweet citrus segments, shredded carrot, hemp seeds, mint, and white wine vinegar.</p>
+            <div class="menu-item-foot">
+              <span class="price">$9.95</span>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openBuilder('Citrus Sunshine Salad', 9.95)">Customize</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-category" id="cat-sides" style="padding-bottom:10px;">
+      <h3>Sides</h3>
+      <div class="menu-grid">
+        <div class="menu-item" data-tags="vegan under500" onclick="openBuilder('Garlic Herb Sweet Potato Wedges', 4.50)">
+          <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" alt="Garlic Herb Sweet Potato Wedges">
+          <div class="menu-item-body">
+            <h4>Garlic Herb Sweet Potato Wedges</h4>
+            <p>Oven roasted fresh sweet potato wedges tossed in extra virgin olive oil, minced garlic, and rosemary.</p>
+            <div class="menu-item-foot">
+              <span class="price">$4.50</span>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openBuilder('Garlic Herb Sweet Potato Wedges', 4.50)">Customize</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-item" data-tags="vegan under500" onclick="openBuilder('Toasted Sourdough Slice', 3.00)">
+          <img src="https://images.unsplash.com/photo-1549931319-a545dcf3bc73?auto=format&fit=crop&w=600&q=80" alt="Toasted Sourdough Slice">
+          <div class="menu-item-body">
+            <h4>Toasted Sourdough Slice</h4>
+            <p>Two warm slices of locally baked rustic sourdough bread lightly brushed with sea salt infused olive oil.</p>
+            <div class="menu-item-foot">
+              <span class="price">$3.00</span>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openBuilder('Toasted Sourdough Slice', 3.00)">Customize</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="catering">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Choose your format</span>
+      <h2>Two ways to feed a crowd</h2>
+    </div>
+    <div class="formats">
+      <div class="format-card">
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80" alt="Individually packaged salad bowl">
+        <div class="format-body">
+          <span class="eyebrow">Everyone gets what they want</span>
+          <h3>Individually packaged</h3>
+          <p>Each guest gets their own signature salad, warm bowl, or plate — dressing on the side, utensils and napkins included.</p>
+          <div class="format-actions">
+            <button class="btn btn-primary btn-sm" onclick="openCateringForm('Individually packaged')">Order this style</button>
+            <a href="menu.html" class="btn btn-ghost btn-sm">View menu</a>
+          </div>
+        </div>
+      </div>
+      <div class="format-card">
+        <img src="https://images.unsplash.com/photo-1662743234719-d893bd7e6b61?auto=format&fit=crop&w=800&q=80" alt="Buffet style spread of colorful bowls">
+        <div class="format-body">
+          <span class="eyebrow">Build-your-own, at select locations</span>
+          <h3>Buffet-style bar</h3>
+          <p>We bring the greens, grains, proteins and toppings — your guests build their own bowl exactly how they like it.</p>
+          <div class="format-actions">
+            <button class="btn btn-primary btn-sm" onclick="openCateringForm('Buffet-style bar')">Order this style</button>
+            <a href="menu.html" class="btn btn-ghost btn-sm">View menu</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="cateringForm">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Request a quote</span>
+      <h2>Tell us about your event</h2>
+    </div>
+    <form class="form-card" style="max-width:720px;" onsubmit="submitCatering(event)">
+      <div class="form-row">
+        <div class="field"><label>Full name</label><input required id="cName" placeholder="Jane Doe"></div>
+        <div class="field"><label>Email address</label><input required type="email" id="cEmail" placeholder="you@email.com"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Event Date</label><input required type="date" id="cDate"></div>
+        <div class="field"><label>Guest Count</label><input required type="number" min="5" id="cGuests" placeholder="Min. 5 guests"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Catering style</label>
+          <select id="cFormat">
+            <option>Individually packaged</option>
+            <option>Buffet-style bar</option>
+          </select>
+        </div>
+        <div class="field"><label>Delivery or Pickup?</label>
+          <select id="cDelivery">
+            <option>We need delivery</option>
+            <option>We will pick it up</option>
+          </select>
+        </div>
+      </div>
+      <div class="field full" style="margin-bottom:14px;"><label>Dietary restrictions or notes</label><textarea id="cNotes" placeholder="Any gluten-free guests? Need compostable plates?"></textarea></div>
+      <button class="btn btn-coral" type="submit">Submit Request</button>
+      <div class="confirm-box" id="cateringConfirm"></div>
+    </form>
+  </div>
+</section>
+
+<section class="section" style="background:var(--white); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="features">
+      <div class="feature"><div class="icon">🌿</div><h3>Farm to bowl</h3><p>Every single ingredient sourced locally and prepped daily, never frozen.</p></div>
+      <div class="feature"><div class="icon">🚚</div><h3>Easy ordering</h3><p>One form, one confirmation, zero back-and-forth.</p></div>
+      <div class="feature"><div class="icon">🥗</div><h3>Flexible formats</h3><p>Individually packed or buffet-style — your call.</p></div>
+      <div class="feature"><div class="icon">👥</div><h3>Any group size</h3><p>From a table of two to a lawn full of two hundred.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="reserve">
+  <div class="reserve-section">
+    <div class="wrap reserve-grid">
+      <div>
+        <span class="eyebrow">Dine with us</span>
+        <h2>Reserve a table</h2>
+        <p>Pick a date and time and we'll hold your table. Confirmation is instant — no calls, no waiting.</p>
+        <div class="avail-strip" id="availStrip"></div>
+      </div>
+      <form class="form-card" onsubmit="submitReservation(event)">
+        <div class="form-row">
+          <div class="field"><label>Name</label><input required id="rName" placeholder="Full name"></div>
+          <div class="field"><label>Email</label><input required type="email" id="rEmail" placeholder="you@email.com"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Phone</label><input required id="rPhone" placeholder="(555) 000-0000"></div>
+          <div class="field"><label>Party size</label>
+            <select id="rParty">
+              <option>1</option><option selected>2</option><option>3</option><option>4</option>
+              <option>5</option><option>6</option><option>7</option><option>8+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Date</label><input required type="date" id="rDate" onchange="renderAvailability()"></div>
+          <div class="field"><label>Time</label>
+            <select id="rTime" onchange="checkSlot()">
+              <option value="">Select a time</option>
+              <option>11:30 AM</option><option>12:00 PM</option><option>12:30 PM</option>
+              <option>1:00 PM</option><option>5:30 PM</option><option>6:00 PM</option>
+              <option>6:30 PM</option><option>7:00 PM</option><option>7:30 PM</option><option>8:00 PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="field full" style="margin-bottom:14px;"><label>Occasion (optional)</label><input id="rNotes" placeholder="Birthday, first date, work catch-up..."></div>
+        <div class="form-foot">
+          <span class="form-note" id="slotNote">Each seating holds 8 tables.</span>
+          <button class="btn btn-primary" type="submit">Book Table</button>
+        </div>
+        <div class="confirm-box" id="reserveConfirm"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <a href="careers.html" class="chef-banner">
+    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1500&q=80" alt="Kitchen staff chopping fresh ingredients happily">
+    <div class="chef-content">
+      <span class="eyebrow" style="color:var(--lime);">Work With Us</span>
+      <h2>Love where you work?</h2>
+      <p>We are always on the hunt for passion-driven kitchen heroes, food prep superstars, and friendly team members. Learn more and apply today.</p>
+      <span class="btn btn-coral">Apply For Roles</span>
+    </div>
+  </a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col" style="grid-column: 1 / span 1;">
+        <div class="logo" style="margin-bottom:14px;"><span class="dot"></span>Summer Front</div>
+        <p style="font-size:13.5px; opacity:0.6; line-height:1.6;">Fresh ingredients prepped daily in beautiful signature bowls, custom catered platters, or saved seats in our sunlit dining spaces.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Order</h4>
+        <a href="#menu">Build-your-own</a>
+        <a href="#catering">Catering styles</a>
+        <a href="menu.html">Full Menu</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="locations.html">Locations</a>
+        <a href="careers.html">Careers</a>
+        <a href="mailto:rrobinhq@gmail.com">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Follow</h4>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Summer Front. All rights reserved.</span>
+      <span>Demo build — reservation & login data is stored for this app only.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="orderModal">
+  <div class="modal" style="max-width:440px;">
+    <button class="modal-close" onclick="closeOrderModal()">✕</button>
+    <h3>How do you want your food?</h3>
+    <div class="sub">Find a Summer Front near you.</div>
+    <div class="order-toggle">
+      <button class="toggle-btn active" id="toggleDelivery" onclick="setOrderMode('delivery')">Delivery</button>
+      <button class="toggle-btn" id="togglePickup" onclick="setOrderMode('pickup')">Pickup</button>
+    </div>
+    <div class="field" style="margin-top:16px;">
+      <label>Address or zip code</label>
+      <input id="orderAddress" placeholder="Enter address or zip">
+    </div>
+    <button class="btn btn-primary" style="width:100%; margin-top:14px;" onclick="findStores()">Find stores</button>
+    <div id="storeResults" style="margin-top:16px; display:none;"></div>
+  </div>
+</div>
+
+<div class="panel-overlay" id="builderOverlay" onclick="if(event.target===this) closeBuilder()">
+  <div class="side-panel" id="builderPanel">
+    <button class="modal-close" onclick="closeBuilder()">✕</button>
+    <span class="eyebrow">Customize</span>
+    <h3 id="builderTitle" style="font-size:24px; margin:6px 0 4px;">Menu item — edit later</h3>
+    <p class="sub" style="margin-bottom:0;">Build it exactly how you like it.</p>
+    <div class="builder-step">
+      <h4>Base <span class="step-hint">Choose 1</span></h4>
+      <div class="option-list" id="baseOptions"></div>
+    </div>
+    <div class="builder-step">
+      <h4>Ingredients <span class="step-hint">4 free, then $0.50 each</span></h4>
+      <div class="option-list" id="ingredientOptions"></div>
+      <div class="builder-tip" id="builderTip">Standard bowls come with 4 free ingredients. Extra ingredients are $0.50 each.</div>
+    </div>
+    <div class="builder-step">
+      <h4>Premium add-ons <span class="step-hint">Priced individually</span></h4>
+      <div class="option-list" id="premiumOptions"></div>
+    </div>
+    <div class="builder-step">
+      <h4>Dressing <span class="step-hint">Choose 1 (served on the side)</span></h4>
+      <div class="option-list" id="dressingOptions"></div>
+    </div>
+    <div class="builder-footer">
+      <div class="builder-stats">
+        <div>
+          <div class="builder-price" id="builderPrice">$0.00</div>
+          <div class="builder-cal" id="builderCal">0 cal</div>
+        </div>
+        <button class="btn btn-coral" id="addToCartBtn" onclick="addToCart()">Add to cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="authModal" onclick="if(event.target===this) closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="loginView">
+      <h3>Welcome back</h3>
+      <div class="sub">Log in to view saved reservations.</div>
+      <div class="modal-error" id="loginError"></div>
+      <div class="field"><label>Username</label><input id="loginEmail" placeholder="your_username"></div>
+      <div class="field"><label>Password</label><input id="loginPassword" type="password" placeholder="••••••••"></div>
+      <button class="btn btn-primary" style="width:100%; margin-top:6px;" onclick="doLogin()">Log in</button>
+      <div class="modal-switch">Don't have an account? <a onclick="openModal('signup')">Sign up</a></div>
+    </div>
+    <div id="signupView" style="display:none;">
+      <h3>Create an account</h3>
+      <div class="sub">Sign up to hold tables instantly.</div>
+      <div class="modal-error" id="signupError"></div>
+      <div class="field"><label>Username</label><input id="signupName" placeholder="your_username"></div>
+      <div class="field"><label>Password</label><input id="signupPassword" type="password" placeholder="At least 6 characters"></div>
+      <div class="field"><label>Confirm password</label><input id="signupConfirm" type="password" placeholder="Type it again"></div>
+      <button class="btn btn-primary" style="width:100%; margin-top:6px;" onclick="doSignup()">Sign up</button>
+      <div class="modal-switch">Already have an account? <a onclick="openModal('login')">Log in</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   SUMMER FRONT — live backend - Supabase: reservations, catering_orders, newsletter, users
+   ===================================================== */
+const SUPABASE_URL = "https://jvlmwwurxmcrixwtamre.supabase.co";
+const SUPABASE_KEY = "sb_publishable_53xsljTvgclhG80UqDuFCA_u0rAQ0VO";
+const FORMSPREE_URL = "https://formspree.io/f/mzdnzboz";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let currentUser = null; 
+const TABLES_PER_SLOT = 8;
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=> t.classList.remove('show'), 3200);
+}
+
+async function notifyRestaurant(subject, fields){
+  try{
+    await fetch(FORMSPREE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ _subject: subject, ...fields })
+    });
+  }catch(e){
+    console.error("Catering Formspree post skipped or failed:", e);
+  }
+}
+
+/* Auth + modal logic */
+function openModal(mode){
+  document.getElementById('authModal').classList.add('show');
+  document.getElementById('loginView').style.display = mode==='login' ? 'block' : 'none';
+  document.getElementById('signupView').style.display = mode==='signup' ? 'block' : 'none';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('signupError').classList.remove('show');
+}
+function closeModal(){
+  document.getElementById('authModal').classList.remove('show');
+}
+
+async function doSignup(){
+  const username = document.getElementById('signupName').value.trim();
+  const pass = document.getElementById('signupPassword').value;
+  const confirm = document.getElementById('signupConfirm').value;
+  const err = document.getElementById('signupError');
+  err.classList.remove('show');
+  if(!/^[A-Za-z0-9_]{3,20}$/.test(username)){
+    err.textContent = 'Username: 3-20 characters, letters/numbers/underscore only.';
+    err.classList.add('show');
+    return;
+  }
+  if(pass !== confirm){
+    err.textContent = "Passwords don't match.";
+    err.classList.add('show');
+    return;
+  }
+  if(pass.length < 6){
+    err.textContent = 'Password needs 6+ characters.';
+    err.classList.add('show');
+    return;
+  }
+  const { data, error } = await sb.rpc('signup_user', { p_username: username, p_password: pass });
+  if(error) console.error('signup_user RPC error:', error);
+  if(error || !data || !data.success){
+    err.textContent = (data && data.error) || (error && error.message) || 'Something went wrong — try again.';
+    err.classList.add('show');
+    return;
+  }
+  currentUser = { username };
+  closeModal();
+  refreshAuthUI();
+  showToast(`Welcome, ${username} — you're signed in.`);
+}
+
+async function doLogin(){
+  const username = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginError');
+  err.classList.remove('show');
+  const { data, error } = await sb.rpc('login_user', { p_username: username, p_password: pass });
+  if(error) console.error('login_user RPC error:', error);
+  if(error || !data || !data.success){
+    err.textContent = (data && data.error) || (error && error.message) || 'Something went wrong — try again.';
+    err.classList.add('show');
+    return;
+  }
+  currentUser = { username };
+  closeModal();
+  refreshAuthUI();
+  showToast(`Welcome back, ${username}.`);
+}
+
+function logout(){
+  currentUser = null;
+  refreshAuthUI();
+  const myRes = document.getElementById('myReservations');
+  if(myRes) myRes.style.display = 'none';
+  showToast("Logged out successfully.");
+}
+
+function refreshAuthUI(){
+  const area = document.getElementById('authArea');
+  if(!area) return;
+  if(currentUser){
+    const initial = currentUser.username.charAt(0).toUpperCase();
+    area.innerHTML = `
+      <div class="user-pill">
+        <div class="avatar">${initial}</div>
+        <span>${currentUser.username}</span>
+        <button class="btn btn-outline btn-sm" onclick="logout()" style="padding:4px 10px; font-size:11px; margin-left:6px;">Logout</button>
+      </div>`;
+  } else {
+    area.innerHTML = `
+      <button class="btn btn-ghost btn-sm" onclick="openModal('login')">Log in</button>
+      <button class="btn btn-primary btn-sm" onclick="openModal('signup')">Sign up</button>`;
+  }
+}
+
+/* Catering form logic */
+function openCateringForm(format){
+  document.getElementById('cFormat').value = format;
+  document.getElementById('cateringForm').scrollIntoView({ behavior:'smooth' });
+}
+
+async function submitCatering(e){
+  e.preventDefault();
+  const order = {
+    name: document.getElementById('cName').value.trim(),
+    email: document.getElementById('cEmail').value.trim(),
+    event_date: document.getElementById('cDate').value,
+    guest_count: Number(document.getElementById('cGuests').value),
+    format: document.getElementById('cFormat').value,
+    delivery: document.getElementById('cDelivery').value,
+    notes: document.getElementById('cNotes').value.trim()
+  };
+  const { error } = await sb.from('catering_orders').insert(order);
+  if(error){
+    showToast('Could not send request — please try again.');
+    console.error(error);
+    return;
+  }
+  const box = document.getElementById('cateringConfirm');
+  box.classList.add('show');
+  box.innerHTML = `<b>Request sent 🌿</b><br>We'll email ${order.email} within 24 hours with a quote for ${order.guest_count} guests.`;
+  notifyRestaurant('New catering request', order);
+  showToast('Catering request sent!');
+  e.target.reset();
+}
+
+/* Newsletter signup */
+async function submitNewsletter(e){
+  e.preventDefault();
+  const email = document.getElementById('nlEmail').value.trim().toLowerCase();
+  const msg = document.getElementById('nlMsg');
+  const { error } = await sb.from('newsletter').insert({ email });
+  if(error){
+    msg.textContent = error.code === '23505' ? "You're already on the list!" : 'Something went wrong — try again.';
+  } else {
+    msg.textContent = 'Thanks for subscribing — welcome to Summer Front.';
+  }
+  msg.style.color = 'var(--teal)';
+  document.getElementById('nlEmail').value = '';
+}
+
+/* Reservation / availability checks */
+const SLOTS = ["11:30 AM","12:00 PM","12:30 PM","1:00 PM","5:30 PM","6:00 PM","6:30 PM","7:00 PM","7:30 PM","8:00 PM"];
+async function renderAvailability(){
+  const date = document.getElementById('rDate').value;
+  const strip = document.getElementById('availStrip');
+  if(!date){
+    strip.innerHTML = '<span class="avail-chip">Pick a date to see open times</span>';
+    return;
+  }
+  const { data, error } = await sb.rpc('get_availability', { p_date: date });
+  const counts = {};
+  if(!error && data){
+    data.forEach(row => counts[row.res_time] = Number(row.booked_count));
+  }
+  strip.innerHTML = SLOTS.map(s=>{
+    const count = counts[s] || 0;
+    const full = count >= TABLES_PER_SLOT;
+    return `<span class="avail-chip ${full?'full':''}">${s}${full? ' · full' : ` · ${TABLES_PER_SLOT-count} left`}</span>`;
+  }).join('');
+}
+
+async function checkSlot(){
+  const date = document.getElementById('rDate').value;
+  const time = document.getElementById('rTime').value;
+  const note = document.getElementById('slotNote');
+  if(!date || !time){
+    note.textContent = 'Each seating holds 8 tables.';
+    return;
+  }
+  const { data, error } = await sb.rpc('get_availability', { p_date: date });
+  let count = 0;
+  if(!error && data){
+    const row = data.find(r=>r.res_time===time);
+    count = row ? Number(row.booked_count) : 0;
+  }
+  note.textContent = count >= TABLES_PER_SLOT ? 'That time is fully booked — please choose another.' : `${TABLES_PER_SLOT-count} table(s) left for this time.`;
+}
+
+async function submitReservation(e){
+  e.preventDefault();
+  const date = document.getElementById('rDate').value;
+  const time = document.getElementById('rTime').value;
+  if(!date || !time){
+    showToast('Please choose a date and time.');
+    return;
+  }
+  const res = {
+    guest_name: document.getElementById('rName').value.trim(),
+    guest_email: document.getElementById('rEmail').value.trim(),
+    guest_phone: document.getElementById('rPhone').value.trim(),
+    party_size: Number(document.getElementById('rParty').value) || 2,
+    res_date: date,
+    res_time: time,
+    notes: document.getElementById('rNotes').value.trim()
+  };
+  const { error } = await sb.from('reservations').insert(res);
+  if(error){
+    showToast('Slot just filled up or system error occurred. Please try another time.');
+    console.error(error);
+    return;
+  }
+  const box = document.getElementById('reserveConfirm');
+  box.classList.add('show');
+  box.innerHTML = `<b>Table reserved! ✨</b><br>See you on ${res.res_date} at ${res.res_time}. Confirmation sent to ${res.guest_email}.`;
+  notifyRestaurant('New reservation booked', res);
+  showToast('Table booked successfully!');
+  e.target.reset();
+  renderAvailability();
+}
+
+/* 'Find a store' modal logic */
+let orderMode = 'delivery';
+function openOrderModal(){
+  document.getElementById('orderModal').classList.add('show');
+}
+function closeOrderModal(){
+  document.getElementById('orderModal').classList.remove('show');
+  document.getElementById('storeResults').style.display='none';
+}
+function setOrderMode(mode){
+  orderMode = mode;
+  document.getElementById('toggleDelivery').classList.toggle('active', mode==='delivery');
+  document.getElementById('togglePickup').classList.toggle('active', mode==='pickup');
+}
+function findStores(){
+  const addr = document.getElementById('orderAddress').value.trim();
+  const results = document.getElementById('storeResults');
+  results.style.display = 'block';
+  results.innerHTML = '<div class="spinner"></div>';
+  setTimeout(()=>{
+    const stores = [
+      { name:'Summer Front Westlands', meta: addr ? `Near ${addr} · 0.4 mi` : 'Mvuli Road, Westlands, Nairobi', open:true },
+      { name:'Summer Front Gigiri', meta:'Gigiri Avenue, Nairobi · 1.1 mi', open:true },
+      { name:'Summer Front CBD', meta:'Kenyatta Avenue, Nairobi · 2.3 mi', open:false },
+    ];
+    results.innerHTML = stores.map(s => `
+      <div class="store-card" style="opacity:1;">
+        <div>
+          <div class="store-name">${s.name}</div>
+          <div class="store-meta">${s.meta}</div>
+          <div class="store-status">
+            <span class="status-dot" style="background:${s.open?'#3AAE6A':'#FF6B4A'}"></span>
+            ${s.open ? 'Accepting online orders' : 'Closed — Opens 8am tomorrow'}
+          </div>
+        </div>
+        ${s.open ? `<a href="menu.html" class="btn btn-primary btn-sm">Order Here</a>` : ''}
+      </div>
+    `).join('');
+  }, 1000);
+}
+
+/* Scrollspy for menu categories */
+function scrollToCat(catId){
+  const el = document.getElementById('cat-' + catId);
+  if(el){
+    const offset = 120;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
+
+let activeFilters = [];
+function toggleFilter(tag, btn){
+  btn.classList.toggle('active');
+  if(activeFilters.includes(tag)){
+    activeFilters = activeFilters.filter(f=>f!==tag);
+  } else {
+    activeFilters.push(tag);
+  }
+  const items = document.querySelectorAll('.menu-item');
+  items.forEach(item => {
+    const tags = (item.dataset.tags || '').split(' ');
+    const matches = activeFilters.every(f => {
+      if(f==='under500') return tags.includes('under500');
+      return tags.includes(f);
+    });
+    if(!activeFilters.length || matches){
+      item.classList.remove('hide');
+    } else {
+      item.classList.add('hide');
+    }
+  });
+}
+
+function initScrollspy(){
+  const cats = document.querySelectorAll('.menu-category');
+  const links = document.querySelectorAll('.menu-catnav .cat-link');
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const cat = entry.target.id.replace('cat-','');
+        links.forEach(l => l.classList.toggle('active', l.dataset.cat === cat));
+      }
+    });
+  }, { rootMargin: '-140px 0px -60% 0px', threshold: 0 });
+  cats.forEach(c => observer.observe(c));
+}
+
+/* ======================================================
+   SALAD / BOWL BUILDER (PHASE 1 REAL CONTENT)
+   ====================================================== */
+const BASES = ['Organic Quinoa', 'Warm Wild Rice', 'Baby Spinach', 'Tuscan Kale'];
+const INGREDIENTS = ['Roasted Sweet Potato', 'English Cucumber', 'Grape Tomatoes', 'Red Onion', 'Apple Cubes', 'Roasted Broccoli', 'Artisan Croutons', 'Shredded Carrot'];
+const PREMIUMS = [
+  { name:'Creamy Avocado Chunk', price:2.50, cal:120 },
+  { name:'French Goat Cheese', price:1.50, cal:80 },
+  { name:'Citrus Grilled Chicken', price:2.00, cal:60 },
+];
+const DRESSINGS = ['Balsamic Vinaigrette', 'Creamy Tahini Lemon', 'Sesame Ginger Drizzle', 'Olive Oil & Lime'];
+const FREE_INGREDIENT_LIMIT = 4;
+const CAL_PER_INGREDIENT = 35;
+
+let builder = { itemName:'', basePrice:0, base:null, ingredients:[], premiums:[], dressing:null };
+
+function openBuilder(itemName, basePrice){
+  builder = { itemName, basePrice, base:null, ingredients:[], premiums:[], dressing:null };
+  document.getElementById('builderTitle').textContent = itemName;
+  document.getElementById('baseOptions').innerHTML = BASES.map((b,i)=> `<button class="option-pill" data-i="${i}" onclick="selectBase(${i}, this)">${b}<span class="badge">✓</span></button>`).join('');
+  document.getElementById('ingredientOptions').innerHTML = INGREDIENTS.map((ing,i)=> `<button class="option-pill" data-i="${i}" onclick="toggleIngredient(${i}, this)">${ing}<span class="badge">✓</span></button>`).join('');
+  document.getElementById('premiumOptions').innerHTML = PREMIUMS.map((p,i)=> `<button class="option-pill" data-i="${i}" onclick="togglePremium(${i}, this)">${p.name} (+$${p.price.toFixed(2)})<span class="badge">✓</span></button>`).join('');
+  document.getElementById('dressingOptions').innerHTML = DRESSINGS.map((d,i)=> `<button class="option-pill" data-i="${i}" onclick="selectDressing(${i}, this)">${d}<span class="badge">✓</span></button>`).join('');
+  
+  document.getElementById('builderOverlay').style.display = 'block';
+  setTimeout(()=> document.getElementById('builderPanel').classList.add('show'), 10);
+  updateBuilderStats();
+}
+
+function closeBuilder(){
+  document.getElementById('builderPanel').classList.remove('show');
+  setTimeout(()=> document.getElementById('builderOverlay').style.display = 'none', 300);
+}
+
+function selectBase(idx, el){
+  builder.base = idx;
+  el.parentNode.querySelectorAll('.option-pill').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  updateBuilderStats();
+}
+
+function toggleIngredient(idx, el){
+  if(builder.ingredients.includes(idx)){
+    builder.ingredients = builder.ingredients.filter(i => i !== idx);
+    el.classList.remove('selected');
+  } else {
+    builder.ingredients.push(idx);
+    el.classList.add('selected');
+  }
+  const tip = document.getElementById('builderTip');
+  if(builder.ingredients.length > FREE_INGREDIENT_LIMIT){
+    tip.classList.add('show');
+  } else {
+    tip.classList.remove('show');
+  }
+  updateBuilderStats();
+}
+
+function togglePremium(idx, el){
+  if(builder.premiums.includes(idx)){
+    builder.premiums = builder.premiums.filter(i => i !== idx);
+    el.classList.remove('selected');
+  } else {
+    builder.premiums.push(idx);
+    el.classList.add('selected');
+  }
+  updateBuilderStats();
+}
+
+function selectDressing(idx, el){
+  builder.dressing = idx;
+  el.parentNode.querySelectorAll('.option-pill').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  updateBuilderStats();
+}
+
+function updateBuilderStats(){
+  let price = builder.basePrice;
+  if(builder.ingredients.length > FREE_INGREDIENT_LIMIT){
+    price += (builder.ingredients.length - FREE_INGREDIENT_LIMIT) * 0.50;
+  }
+  builder.premiums.forEach(idx => {
+    price += PREMIUMS[idx].price;
+  });
+  
+  let cal = 300; // Base calories standard estimation
+  cal += builder.ingredients.length * CAL_PER_INGREDIENT;
+  builder.premiums.forEach(idx => {
+    cal += PREMIUMS[idx].cal;
+  });
+
+  const pEl = document.getElementById('builderPrice');
+  pEl.textContent = `$${price.toFixed(2)}`;
+  pEl.classList.add('flash');
+  setTimeout(()=> pEl.classList.remove('flash'), 150);
+
+  document.getElementById('builderCal').textContent = `${cal} cal`;
+}
+
+/* ======================================================
+   CART SYSTEM
+   ====================================================== */
+let cart = [];
+
+function bounceCart(){
+  const btn = document.getElementById('cartBtn');
+  btn.classList.remove('bounce');
+  void btn.offsetWidth;
+  btn.classList.add('bounce');
+}
+
+function addToCart(){
+  if(builder.base === null){
+    showToast("Please choose a Base before adding.");
+    return;
+  }
+  if(builder.dressing === null){
+    showToast("Please select a Dressing option.");
+    return;
+  }
+
+  const ingredientCost = Math.max(0, builder.ingredients.length - FREE_INGREDIENT_LIMIT) * 0.50;
+  const premiumCost = builder.premiums.reduce((sum,i)=> sum + PREMIUMS[i].price, 0);
+  const total = builder.basePrice + ingredientCost + premiumCost;
+  const cal = 300 + builder.ingredients.length * CAL_PER_INGREDIENT + builder.premiums.reduce((sum,i)=> sum + PREMIUMS[i].cal, 0);
+
+  cart.push({
+    name: builder.itemName,
+    price: total,
+    cal,
+    qty: 1
+  });
+
+  renderCart();
+  bounceCart();
+  closeBuilder();
+  showToast(`Added ${builder.itemName} to your cart — $${total.toFixed(2)}`);
+}
+
+// Global cart sidebar container injection (if needed, otherwise we target the container)
+document.write(`
+<div class="panel-overlay" id="cartOverlay" onclick="if(event.target===this) closeCart()">
+  <div class="side-panel" id="cartPanel">
+    <button class="modal-close" onclick="closeCart()">✕</button>
+    <span class="eyebrow">Your order</span>
+    <h3 style="font-size:24px; margin:6px 0 20px;">Review Basket</h3>
+    <div class="cart-empty" id="cartEmpty">Your basket is empty. Add a delicious bowl!</div>
+    <div id="cartItemsWrap"></div>
+    <div class="builder-footer" id="cartFooter" style="display:none; background:none; padding:18px 0; border-top:1px solid var(--line);">
+      <div class="cart-total-row">
+        <span>Total:</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="btn btn-coral" style="width:100%; margin-bottom:10px;" onclick="fakeCheckout('delivery')">Checkout Delivery</button>
+      <button class="btn btn-outline" style="width:100%;" onclick="fakeCheckout('pickup')">Checkout Pickup</button>
+    </div>
+  </div>
+</div>
+`);
+
+function openCart(){
+  document.getElementById('cartOverlay').style.display = 'block';
+  setTimeout(()=> document.getElementById('cartPanel').classList.add('show'), 10);
+  renderCart();
+}
+
+function closeCart(){
+  document.getElementById('cartPanel').classList.remove('show');
+  setTimeout(()=> document.getElementById('cartOverlay').style.display = 'none', 300);
+}
+
+function removeFromCart(i){
+  cart.splice(i, 1);
+  renderCart();
+}
+
+function renderCart(){
+  const wrap = document.getElementById('cartItemsWrap');
+  const empty = document.getElementById('cartEmpty');
+  const footer = document.getElementById('cartFooter');
+  if(!cart.length){
+    wrap.innerHTML = '';
+    empty.style.display = 'block';
+    footer.style.display = 'none';
+    document.getElementById('cartBadge').textContent = '0';
+    return;
+  }
+  empty.style.display = 'none';
+  footer.style.display = 'block';
+  wrap.innerHTML = cart.map((item,i)=>`
+    <div class="cart-item">
+      <div class="cart-item-body">
+        <h4>${item.name}</h4>
+        <p>${item.cal} cal</p>
+        <button class="cart-item-del" onclick="removeFromCart(${i})">Remove</button>
+      </div>
+      <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+    </div>`).join('');
+  const total = cart.reduce((sum,i)=> sum + i.price, 0);
+  document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+  document.getElementById('cartBadge').textContent = cart.reduce((n,i)=>n+i.qty, 0);
+}
+
+function fakeCheckout(method){
+  if(!cart.length) return;
+  const total = cart.reduce((sum,i)=> sum + i.price, 0);
+  closeCart();
+  showToast(`Order placed with ${method === 'card' ? 'card' : method} — $${total.toFixed(2)}. (Demo checkout — no payment taken.)`);
+  cart = [];
+  renderCart();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  refreshAuthUI();
+  initScrollspy();
+});
+
+// broken image? swap in the branded placeholder instead of a blank box
+document.addEventListener('error', function(e){
+  const el = e.target;
+  if(el.tagName === 'IMG' && !el.dataset.fallbackApplied){
+    el.dataset.fallbackApplied = 'true';
+    el.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"><rect width="300" height="200" fill="#EFE9D6"/><circle cx="150" cy="85" r="18" fill="#FF6B4A"/><text x="150" y="135" font-family="Inter, sans-serif" font-size="13" fill="#16241C" text-anchor="middle" opacity="0.6">Summer Front</text></svg>'
+    );
+    el.style.objectFit = 'cover';
+  }
+}, true);
+</script>
+<script src="chatbot-widget.js" defer></script>
+</body>
+</html>

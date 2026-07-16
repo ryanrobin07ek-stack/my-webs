@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R ROBIN.COM — Tech &amp; Business Services Collective</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:            #ffffff;    --ink:           #0b1220;    --muted:         #5b6472;    --line:          #e6e8ec;    --panel:         #f7f8fa;    --accent:        #2952e3;    --accent-ink:    #16307d;    --amber:         #f5a623;    --radius:        14px;
+
+    --font-display:  'Space Grotesk', sans-serif;
+    --font-body:      'Inter', sans-serif;
+    --font-mono:      'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background-color:var(--bg);    background-image:url("https://i.postimg.cc/283QVXQf/Unleash-the-Power-and-Creativity-of-C.jpg");    background-size:cover;    background-position:center;    background-repeat:no-repeat;
+    background-attachment:fixed;    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{ display:block; max-width:100%; }
+  a{ color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .wrap{
+    max-width:1160px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+
+  header{
+    position:sticky; top:0; z-index:40;
+    background:#ffffff;
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 0;
+  }
+  .logo{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.25rem;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+  .logo span{ color:var(--accent); }
+  .nav-links{
+    display:flex; gap:28px; list-style:none;
+    font-size:0.95rem; font-weight:500;
+  }
+  .nav-links a{ text-decoration:none; color:var(--ink); }
+  .nav-links a:hover{ color:var(--accent); }
+  .nav-cta{
+    background:var(--ink); color:#fff;
+    padding:10px 18px; border-radius:999px;
+    text-decoration:none; font-size:0.9rem; font-weight:600;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{ background:var(--accent); }
+  .burger{ display:none; }
+
+  @media (max-width:820px){
+    .nav-links{ display:none; }
+  }
+
+  .hero{
+    padding:88px 0 72px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:#fff;
+    text-shadow:0 1px 4px rgba(0,0,0,0.6);
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(11,18,32,0.55);
+    border:1px solid rgba(255,255,255,0.25);
+    padding:6px 12px; border-radius:999px;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:''; width:7px; height:7px; border-radius:50%;
+    background:var(--amber);
+  }
+  h1.headline{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(2.2rem, 5vw, 3.6rem);
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    max-width:820px;
+    color:#fff;
+    text-shadow:0 2px 14px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.5);
+  }
+  .headline .num{ color:var(--amber); }
+  .sub{
+    margin-top:22px;
+    font-size:1.1rem;
+    color:#f2f3f7;
+    text-shadow:0 1px 8px rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.5);
+    max-width:560px;
+  }
+  .hero-actions{
+    margin-top:34px;
+    display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .btn-primary, .btn-secondary{
+    padding:14px 24px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:0.95rem;
+    text-decoration:none;
+    border:1px solid transparent;
+    display:inline-block;
+  }
+  .btn-primary{ background:var(--accent); color:#fff; }
+  .btn-primary:hover{ background:var(--accent-ink); }
+  .btn-secondary{
+    border-color:rgba(255,255,255,0.6);
+    color:#fff;
+    background:rgba(11,18,32,0.35);
+    text-shadow:0 1px 4px rgba(0,0,0,0.5);
+  }
+  .btn-secondary:hover{ border-color:var(--accent); color:var(--accent); }
+
+  .hero-stats{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+    max-width:620px;
+  }
+  .hero-stats div{ border-left:2px solid rgba(255,255,255,0.4); padding-left:14px; }
+  .hero-stats b{
+    font-family:var(--font-mono);
+    display:block; font-size:1.4rem; color:#fff;
+    text-shadow:0 1px 8px rgba(0,0,0,0.6);
+  }
+  .hero-stats span{ font-size:0.85rem; color:#f2f3f7; text-shadow:0 1px 6px rgba(0,0,0,0.6); }
+
+  .section{ padding:80px 0; border-bottom:1px solid var(--line); }
+  .section-head{
+    max-width:640px; margin-bottom:44px;
+    background:rgba(255,255,255,0.85);
+    -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
+    border-radius:var(--radius);
+    padding:20px 24px;
+  }
+  .section-eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--accent-ink); margin-bottom:10px; display:block;
+  }
+  .section h2{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(1.6rem,3vw,2.2rem);
+    letter-spacing:-0.01em;
+  }
+  .section p.lead{ margin-top:14px; color:var(--muted); font-size:1.02rem; }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:20px;
+  }
+  @media (max-width:980px){ .grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .grid{ grid-template-columns:1fr; } }
+
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    text-align:left;
+    display:flex; flex-direction:column;
+    transition:transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 28px rgba(11,18,32,0.08);
+    border-color:#d7dcff;
+  }
+  .card-img{
+    width:100%; height:130px;
+    object-fit:cover;
+    background:var(--panel); 
+  }
+  .card-body{ padding:18px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card-index{
+    font-family:var(--font-mono);
+    font-size:0.75rem; color:var(--accent-ink);
+    letter-spacing:0.04em;
+  }
+  .card-title{
+    font-family:var(--font-display);
+    font-weight:600; font-size:1.02rem; line-height:1.25;
+  }
+  .card-teaser{ font-size:0.87rem; color:var(--muted); flex:1; }
+  .card-more{
+    margin-top:6px;
+    font-size:0.82rem; font-weight:600; color:var(--accent);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(11,18,32,0.55);
+    display:none;
+    align-items:center; justify-content:center;
+    padding:24px;
+    z-index:100;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal{
+    background:#fff;
+    border-radius:20px;
+    max-width:640px; width:100%;
+    max-height:86vh; overflow-y:auto;
+    padding:32px;
+    position:relative;
+    animation:pop 0.18s ease;
+  }
+  @keyframes pop{
+    from{ opacity:0; transform:scale(0.97); }
+    to{ opacity:1; transform:scale(1); }
+  }
+  .modal-close{
+    position:absolute; top:18px; right:18px;
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--line); background:#fff;
+    font-size:1rem; color:var(--muted);
+  }
+  .modal-close:hover{ color:var(--ink); border-color:var(--ink); }
+  .modal-index{
+    font-family:var(--font-mono); color:var(--accent-ink);
+    font-size:0.8rem; margin-bottom:10px; display:block;
+  }
+  .modal h3{
+    font-family:var(--font-display); font-weight:700;
+    font-size:1.5rem; margin-bottom:14px; padding-right:30px;
+  }
+  .modal .desc{ color:var(--muted); font-size:0.98rem; margin-bottom:20px; }
+  .modal .provided-label{
+    font-family:var(--font-mono); font-size:0.75rem;
+    text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--ink); margin-bottom:10px; display:block;
+  }
+  .modal ul{ list-style:none; margin-bottom:26px; }
+  .modal li{
+    padding:9px 0 9px 20px; border-top:1px solid var(--line);
+    font-size:0.92rem; position:relative;
+  }
+  .modal li:first-child{ border-top:none; }
+  .modal li::before{
+    content:'—'; position:absolute; left:0; color:var(--accent);
+  }
+
+  .inquire-box{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px;
+  }
+  .inquire-box label{
+    display:block; font-size:0.85rem; font-weight:600; margin-bottom:8px;
+  }
+  .inquire-box textarea{
+    width:100%; border:1px solid var(--line); border-radius:8px;
+    padding:10px 12px; font-family:inherit; font-size:0.9rem;
+    resize:vertical; min-height:70px; margin-bottom:12px;
+    background:#fff;
+  }
+  .inquire-btn{
+    background:var(--accent); color:#fff; border:none;
+    padding:12px 22px; border-radius:999px; font-weight:600;
+    font-size:0.92rem; width:100%;
+  }
+  .inquire-btn:hover{ background:var(--accent-ink); }
+
+  .ad-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:24px;
+  }
+  @media (max-width:760px){ .ad-grid{ grid-template-columns:1fr; } }
+
+  .ad-card{
+    background:var(--ink);    color:#fff;    border-radius:var(--radius);
+    overflow:hidden;
+    text-align:left;
+    display:flex; flex-direction:column;
+    border:1px solid #232c42;
+    text-decoration:none;
+    transition:transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .ad-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 32px rgba(0,0,0,0.35);
+  }
+  .ad-card-img{
+    width:100%; height:220px;    
+    object-fit:cover;
+    background:#1a2033;          
+  }
+  .ad-card-body{ padding:24px; display:flex; flex-direction:column; gap:10px; }
+  .ad-card-tag{
+    font-family:var(--font-mono);
+    font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase;
+    color:#9fb0ff;
+  }
+  .ad-card-title{
+    font-family:var(--font-display);
+    font-weight:700; font-size:1.3rem; line-height:1.25;
+    color:#fff;
+  }
+  .ad-card-copy{ font-size:0.95rem; color:#c7cbe0; }
+  .ad-card-link{
+    margin-top:6px;
+    font-size:0.92rem; font-weight:600;
+    color:#6d9bff;    display:inline-flex; align-items:center; gap:6px;
+  }
+  .ad-card:hover .ad-card-link{ color:#a9c4ff; text-decoration:underline; }
+
+  .engage-banner{
+    position:relative;
+    width:100%;
+    min-height:280px;
+    border-radius:var(--radius);
+    overflow:hidden;
+    margin-bottom:34px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    background-color:#0b1220; 
+    background-image:url("https://i.postimg.cc/59DgzpT2/AKKI-CREATION.jpg"); 
+    background-size:cover;
+    background-position:center;
+  }
+  .engage-banner::before{
+    content:'';
+    position:absolute; inset:0;
+    background:rgba(11,18,32,0.55); 
+  }
+  .engage-content{ position:relative; z-index:2; padding:30px; color:#fff; }
+  .engage-content h3{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(1.4rem, 3vw, 2rem);
+    margin-bottom:18px;
+  }
+  .engage-btn{
+    display:inline-block;
+    background:var(--amber); color:var(--ink);
+    padding:13px 26px; border-radius:999px;
+    font-weight:600; font-size:0.95rem;
+    border:none;
+  }
+  .engage-btn:hover{ background:#ffbc4d; }
+
+  .discover-overlay{
+    position:fixed; inset:0;
+    z-index:110;
+    display:none;
+    overflow-y:auto;
+    background-color:#0b1220; 
+    background-image:url("https://i.postimg.cc/YCM1NP3h/Take-your-trading-to-the-next-level-with-Prop-Challenge-EA.jpg");
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+  }
+  .discover-overlay.open{ display:block; }
+  .discover-topbar{
+    position:sticky; top:0; z-index:2;
+    display:flex; justify-content:flex-end;
+    padding:20px 24px 0;
+  }
+  .discover-close{
+    width:40px; height:40px; border-radius:50%;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    font-size:1.1rem;
+    box-shadow:0 4px 14px rgba(0,0,0,0.18);
+  }
+  .discover-close:hover{ background:var(--amber); }
+  .discover-inner{
+    max-width:820px; margin:0 auto;
+    padding:20px 24px 90px;
+  }
+  .discover-head{ text-align:center; margin-bottom:36px; color:#fff; }
+  .discover-head h3{
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(1.5rem,3vw,2.1rem); margin-bottom:10px;
+  }
+  .discover-head p{ color:#e3e6f0; }
+
+  .discover-card{
+    background:#fff;               
+    border-radius:var(--radius);
+    overflow:hidden;
+    margin-bottom:26px;            
+  }
+  .discover-card-img{
+    width:100%; height:260px;
+    object-fit:cover;
+    background:var(--panel); 
+  }
+  .discover-card-body{ padding:26px; }
+  .discover-card-text{
+    color:var(--ink);
+    font-size:1rem;
+    margin-bottom:18px;
+  }
+  .discover-contact{
+    display:inline-block;
+    background:var(--accent); color:#fff;
+    padding:11px 22px; border-radius:999px;
+    font-weight:600; font-size:0.92rem;
+    text-decoration:none;
+  }
+  .discover-contact:hover{ background:var(--accent-ink); }
+
+  .engage-banner-2{
+    background-image:url("https://i.postimg.cc/XvXBQ6yS/Meetfaer.jpg"); 
+  }
+
+  .story-overlay{
+    position:fixed; inset:0;
+    z-index:110;
+    display:none;
+    overflow-y:auto;
+    background-color:var(--bg); 
+    background-image:url("https://i.postimg.cc/KvJTFXRv/516999232246640219.jpg"); 
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+  }
+  .story-overlay.open{ display:block; }
+  .story-topbar{
+    position:sticky; top:0; z-index:2;
+    display:flex; justify-content:flex-end;
+    padding:20px 24px 0;
+  }
+  .story-inner{
+    max-width:760px; margin:0 auto;
+    padding:10px 24px 90px;
+  }
+  .story-head{
+    text-align:center; margin-bottom:40px;
+    background:rgba(255,255,255,0.9);
+    -webkit-backdrop-filter:blur(4px);
+    backdrop-filter:blur(4px);
+    border-radius:var(--radius);
+    padding:24px;
+  }
+  .story-head h3{
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(1.5rem,3vw,2.1rem); margin-bottom:10px;
+  }
+  .story-head p{ color:var(--muted); }
+  .story-block{ margin-bottom:46px; }
+  .story-text{
+    font-size:1.05rem; line-height:1.75;
+    color:var(--ink);
+    margin-bottom:20px;
+    background:rgba(255,255,255,0.9);
+    -webkit-backdrop-filter:blur(4px);
+    backdrop-filter:blur(4px);
+    border-radius:var(--radius);
+    padding:20px 22px;
+  }
+  .story-img{
+    width:100%;
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:var(--panel); 
+  }
+  .story-img img{ width:100%; height:auto; display:block; }
+
+  .overlay-footer{
+    border-top:1px solid var(--line);
+    margin-top:20px;
+    padding:26px 20px 20px;
+    display:flex; justify-content:center; gap:28px; flex-wrap:wrap;
+    background:rgba(255,255,255,0.9);
+    -webkit-backdrop-filter:blur(4px);
+    backdrop-filter:blur(4px);
+    border-radius:var(--radius);
+  }
+  .overlay-footer a{
+    font-size:0.9rem; font-weight:600; text-decoration:none; color:var(--ink);
+  }
+  .overlay-footer a:hover{ color:var(--accent); }
+  .overlay-footer.on-dark{
+    border-top-color:rgba(255,255,255,0.25);
+    background:rgba(11,18,32,0.55);
+    -webkit-backdrop-filter:blur(4px);
+    backdrop-filter:blur(4px);
+  }
+  .overlay-footer.on-dark a{ color:#fff; }
+  .overlay-footer.on-dark a:hover{ color:#a9c4ff; }
+
+  .linkedin-section{ background:var(--panel); }
+  .li-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:22px;
+  }
+  @media (max-width:760px){ .li-grid{ grid-template-columns:1fr; } }
+  .li-card{
+    background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+    padding:26px;
+  }
+  .li-card h3{
+    font-family:var(--font-display); font-size:1.15rem; margin-bottom:10px;
+  }
+  .li-card p{ color:var(--muted); font-size:0.94rem; margin-bottom:14px; }
+  .li-card ul{ list-style:none; margin-bottom:18px; }
+  .li-card li{
+    font-size:0.88rem; padding:6px 0 6px 18px; position:relative; color:var(--ink);
+  }
+  .li-card li::before{ content:'—'; position:absolute; left:0; color:var(--accent); }
+  .fee-note{
+    font-size:0.8rem; color:var(--muted); border-top:1px solid var(--line);
+    padding-top:12px; margin-top:4px;
+  }
+
+  .contact-box{
+    background:var(--ink); color:#fff;
+    border-radius:24px; padding:56px 40px;
+    text-align:center;
+  }
+  .contact-box h2{
+    font-family:var(--font-display); font-size:clamp(1.6rem,3vw,2.1rem);
+    margin-bottom:14px;
+  }
+  .contact-box p{ color:#c7cbe0; max-width:480px; margin:0 auto 26px; }
+  .contact-box .btn-primary{ background:var(--amber); color:var(--ink); }
+  .contact-box .btn-primary:hover{ background:#ffbc4d; }
+
+  footer{ padding:56px 0 30px; }
+  .footer-top{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:16px; margin-bottom:40px;
+  }
+  .footer-top .logo{ font-size:1.1rem; }
+  .footer-links{ display:flex; gap:22px; list-style:none; font-size:0.9rem; }
+  .footer-links a{ text-decoration:none; color:var(--muted); }
+  .footer-links a:hover{ color:var(--accent); }
+
+  .learning-ad{
+    border:1px dashed var(--line);
+    border-radius:16px;
+    padding:26px 28px;
+    background:var(--panel);
+    margin-bottom:34px;
+  }
+  .learning-ad .tag{
+    font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--muted);
+    background:#fff; border:1px solid var(--line);
+    padding:4px 10px; border-radius:999px; display:inline-block; margin-bottom:12px;
+  }
+  .learning-ad h4{
+    font-family:var(--font-display); font-size:1.05rem; margin-bottom:8px;
+  }
+  .learning-ad p{ font-size:0.88rem; color:var(--muted); margin-bottom:10px; max-width:760px; }
+  .learning-ad ul{ list-style:none; margin-bottom:10px; }
+  .learning-ad li{ font-size:0.86rem; margin-bottom:4px; }
+  .learning-ad li a{ color:var(--accent-ink); text-decoration:underline; }
+  .learning-ad .fine{ font-size:0.78rem; color:var(--muted); font-style:italic; }
+
+  .copyright{ font-size:0.82rem; color:var(--muted); text-align:center; }
+
+  footer{
+    position:relative;
+    padding:64px 0 30px;
+    background-color:#0b1220;    background-image:url("https://i.postimg.cc/8kbkJnj7/Budget-PC-Setup-Ideas-That-Look-Premium.jpg");    background-size:cover;
+    background-position:center;
+    color:#fff;
+  }
+  footer::before{
+    content:'';
+    position:absolute; inset:0;
+    background:rgba(8,12,24,0.72);  }
+  footer .wrap{ position:relative; z-index:1; }
+  footer .learning-ad{ background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.18); }
+  footer .learning-ad .tag{ background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.18); color:#c7cbe0; }
+  footer .learning-ad h4{ color:#fff; }
+  footer .learning-ad p{ color:#c7cbe0; }
+  footer .learning-ad .fine{ color:#9aa2b5; }
+  footer .footer-top{ padding-top:8px; }
+  footer .footer-links a{ color:#c7cbe0; }
+  footer .footer-links a:hover{ color:#fff; }
+  footer .copyright{ color:#8b93a8; }
+
+  .footer-columns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    padding:34px 0;
+    border-top:1px solid rgba(255,255,255,0.14);
+    border-bottom:1px solid rgba(255,255,255,0.14);
+    margin-bottom:34px;
+  }
+  @media (max-width:560px){ .footer-columns{ grid-template-columns:1fr; gap:8px; } }
+  .footer-col{ list-style:none; }
+  .footer-col.right{ text-align:right; }
+  @media (max-width:560px){ .footer-col.right{ text-align:left; } }
+  .footer-col li{ margin-bottom:14px; }
+  .footer-col button{
+    background:none; border:none; color:#e3e6f0;
+    font-size:0.95rem; font-weight:600; font-family:inherit;
+    padding:0;
+  }
+  .footer-col button:hover{ color:var(--amber); }
+
+  .footer-brand{
+    text-align:center;
+    padding:8px 0 30px;
+    display:flex; flex-direction:column; align-items:center; gap:12px;
+  }
+  .footer-brand img{
+    width:56px; height:56px; border-radius:50%;
+    object-fit:cover;
+    border:1px solid rgba(255,255,255,0.25);
+  }
+  .footer-brand span{
+    font-family:var(--font-mono);
+    font-size:0.82rem; letter-spacing:0.03em;
+    color:#9aa2b5;
+  }
+
+  .newsletter-block{
+    text-align:center;
+    padding:34px 20px;
+    border-radius:var(--radius);
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.14);
+  }
+  .newsletter-block h3{
+    font-family:var(--font-display); font-weight:700;
+    font-size:1.3rem; margin-bottom:10px; color:#fff;
+  }
+  .newsletter-block p{ color:#c7cbe0; font-size:0.94rem; margin-bottom:18px; max-width:460px; margin-left:auto; margin-right:auto; }
+  .newsletter-open-btn{
+    background:var(--amber); color:var(--ink); border:none;
+    padding:13px 28px; border-radius:999px; font-weight:600; font-size:0.94rem;
+  }
+  .newsletter-open-btn:hover{ background:#ffbc4d; }
+
+  .page-overlay{
+    position:fixed; inset:0;
+    z-index:120;
+    display:none;
+    overflow-y:auto;
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+  }
+  .page-overlay.open{ display:block; }
+  .page-topbar{
+    position:sticky; top:0; z-index:2;
+    display:flex; justify-content:flex-end;
+    padding:20px 24px 0;
+  }
+  .page-inner{ max-width:820px; margin:0 auto; padding:10px 24px 60px; }
+  .page-head{
+    text-align:center; margin-bottom:34px;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(4px);
+    border-radius:var(--radius);
+    padding:26px;
+  }
+  .page-head h3{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.5rem,3vw,2.1rem); margin-bottom:8px; }
+  .page-head p{ color:var(--muted); }
+
+  .page-textbox{
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(4px);
+    border-radius:var(--radius);
+    padding:30px;
+    font-size:1rem; line-height:1.8; color:var(--ink);
+    white-space:pre-line;
+    outline:none;
+  }
+  .page-textbox[contenteditable="true"]:focus{ box-shadow:0 0 0 2px var(--accent); }
+  .edit-hint{
+    text-align:center; font-size:0.8rem; color:#fff;
+    background:rgba(11,18,32,0.55); display:inline-block;
+    padding:6px 14px; border-radius:999px; margin:0 auto 18px; display:table;
+  }
+
+  .page-fullrow-img{
+    width:100%; border-radius:var(--radius); overflow:hidden; margin-top:24px;
+    background:var(--panel);
+  }
+  .page-fullrow-img img{ width:100%; height:auto; display:block; }
+
+  .who-block{ margin-bottom:30px; }
+  .who-img{ width:100%; border-radius:var(--radius); overflow:hidden; margin-bottom:18px; background:var(--panel); }
+  .who-img img{ width:100%; height:300px; object-fit:cover; display:block; }
+  .who-text{
+    background:rgba(255,255,255,0.92); backdrop-filter:blur(4px);
+    border-radius:var(--radius); padding:22px; font-size:1rem; line-height:1.75; color:var(--ink);
+    outline:none;
+  }
+
+  .partner-imgrow{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:22px;
+  }
+  @media (max-width:600px){ .partner-imgrow{ grid-template-columns:1fr; } }
+  .partner-imgrow .who-img{ margin-bottom:0; }
+  .partner-imgrow .who-img img{ height:220px; }
+
+  .all-services-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:22px;
+  }
+  @media (max-width:700px){ .all-services-grid{ grid-template-columns:1fr; } }
+  .all-services-cat{
+    background:rgba(11,18,32,0.55);
+    backdrop-filter:blur(4px);
+    border-radius:var(--radius);
+    padding:22px;
+  }
+  .all-services-cat h4{
+    font-family:var(--font-display); font-weight:700; color:#fff;
+    font-size:1.05rem; margin-bottom:12px;
+  }
+  .all-services-cat ul{ list-style:none; }
+  .all-services-cat li{ margin-bottom:4px; }
+  .all-services-cat button{
+    background:none; border:none; color:#fff; text-align:left;
+    font-size:0.9rem; padding:6px 0; width:100%;
+    border-bottom:1px solid rgba(255,255,255,0.12);
+  }
+  .all-services-cat button:hover{ color:var(--amber); }
+
+  .offer-flat-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+  }
+  @media (max-width:820px){ .offer-flat-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:520px){ .offer-flat-grid{ grid-template-columns:1fr; } }
+  .offer-flat-grid button{
+    background:var(--ink); color:#fff; border:1px solid #232c42;
+    border-radius:10px; padding:14px 16px; font-size:0.88rem; text-align:left;
+    transition:background 0.15s ease;
+  }
+  .offer-flat-grid button:hover{ background:var(--accent); }
+
+  .dual-banner{
+    position:relative; width:100%; min-height:220px;
+    border-radius:var(--radius); overflow:hidden;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    background-color:#0b1220; background-size:cover; background-position:center;
+    margin-bottom:22px;
+  }
+  .dual-banner::before{ content:''; position:absolute; inset:0; background:rgba(11,18,32,0.55); }
+  .dual-banner .engage-content{ position:relative; z-index:2; }
+  .dual-banner:last-child{ margin-bottom:0; }
+
+  .newsletter-form-box{
+    background:rgba(255,255,255,0.96);
+    border-radius:var(--radius);
+    padding:30px;
+  }
+  .nf-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  @media (max-width:560px){ .nf-row{ grid-template-columns:1fr; } }
+  .nf-row input{
+    width:100%; border:1px solid var(--line); border-radius:8px;
+    padding:11px 13px; font-family:inherit; font-size:0.92rem; background:#fff;
+  }
+  .nf-label{ font-size:0.85rem; font-weight:600; margin-bottom:14px; display:block; color:var(--ink); }
+  .nf-interests{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:16px;
+  }
+  @media (max-width:560px){ .nf-interests{ grid-template-columns:1fr; } }
+  .nf-chip{
+    border:1px solid var(--line); border-radius:8px; padding:9px 10px;
+    font-size:0.84rem; text-align:left; background:#fff; color:var(--ink);
+  }
+  .nf-chip.selected{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .nf-consent{ display:flex; align-items:flex-start; gap:10px; margin-bottom:14px; font-size:0.86rem; color:var(--ink); }
+  .nf-consent input{ margin-top:3px; }
+  .nf-submit{
+    width:100%; background:var(--accent); color:#fff; border:none;
+    padding:13px; border-radius:999px; font-weight:600; font-size:0.95rem; margin-top:6px;
+  }
+  .nf-submit:hover{ background:var(--accent-ink); }
+  .nf-submit:disabled{ opacity:0.6; }
+  .nf-status{ text-align:center; font-size:0.88rem; margin-top:12px; }
+
+  #cw-launcher{
+    position:fixed; bottom:24px; right:24px;
+    width:58px; height:58px; border-radius:50%;
+    background:var(--ink); color:#fff; border:none; cursor:pointer;
+    box-shadow:0 6px 20px rgba(0,0,0,0.25);
+    display:flex; align-items:center; justify-content:center;
+    z-index:999; transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  #cw-launcher:hover{ transform:scale(1.06); background:var(--accent); box-shadow:0 8px 24px rgba(0,0,0,0.32); }
+  #cw-launcher svg{ width:26px; height:26px; }
+  #cw-launcher .cw-close-icon{ display:none; }
+  #cw-launcher.cw-active .cw-chat-icon{ display:none; }
+  #cw-launcher.cw-active .cw-close-icon{ display:block; }
+
+  #cw-panel{
+    position:fixed; bottom:96px; right:24px;
+    width:340px; max-width:calc(100vw - 32px);
+    height:460px; max-height:calc(100vh - 140px);
+    background:#fff; border-radius:var(--radius);
+    box-shadow:0 12px 40px rgba(0,0,0,0.22);
+    display:flex; flex-direction:column; overflow:hidden;
+    z-index:999; transform-origin:bottom right;
+    transform:scale(0.85); opacity:0; pointer-events:none;
+    transition:transform 0.18s ease, opacity 0.18s ease;
+    font-family:var(--font-body);
+  }
+  #cw-panel.cw-open{ transform:scale(1); opacity:1; pointer-events:auto; }
+
+  #cw-header{
+    background:var(--ink); color:#fff; padding:14px 16px;
+    display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+  }
+  #cw-header-title{ font-family:var(--font-display); font-size:14px; font-weight:600; }
+  #cw-header-sub{ font-size:11px; opacity:0.65; margin-top:2px; }
+  #cw-panel-close{ background:transparent; border:none; color:#fff; font-size:20px; line-height:1; cursor:pointer; padding:4px 8px; opacity:0.8; }
+  #cw-panel-close:hover{ opacity:1; }
+
+  #cw-messages{
+    flex:1; overflow-y:auto; padding:14px;
+    display:flex; flex-direction:column; gap:10px;
+    background:var(--panel);
+  }
+  .cw-msg{ max-width:82%; padding:9px 12px; border-radius:12px; font-size:13.5px; line-height:1.4; white-space:pre-wrap; word-wrap:break-word; }
+  .cw-msg.user{ align-self:flex-end; background:var(--ink); color:#fff; border-bottom-right-radius:3px; }
+  .cw-msg.bot{ align-self:flex-start; background:#eceef1; color:#1a1a1a; border-bottom-left-radius:3px; }
+  .cw-msg.bot.cw-typing{ color:var(--muted); font-style:italic; }
+  .cw-msg.bot.cw-error{ background:#fdecec; color:#9b2c2c; }
+
+  #cw-inputbar{
+    display:flex; align-items:flex-end; gap:8px; padding:10px;
+    border-top:1px solid var(--line); background:#fff; flex-shrink:0;
+  }
+  #cw-input{
+    flex:1; resize:none; border:1px solid var(--line); border-radius:10px;
+    padding:9px 10px; font-size:13.5px; font-family:inherit; max-height:90px; outline:none;
+  }
+  #cw-input:focus{ border-color:var(--accent); }
+  #cw-send{
+    background:var(--ink); color:#fff; border:none; border-radius:10px;
+    width:38px; height:38px; flex-shrink:0; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #cw-send:hover{ background:var(--accent); }
+  #cw-send:disabled{ opacity:0.5; cursor:default; }
+
+  @media (max-width:480px){
+    #cw-panel{ right:16px; bottom:88px; }
+    #cw-launcher{ right:16px; bottom:16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">R <span>ROBIN</span>.COM</div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#linkedin">LinkedIn</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="nav-cta" href="#contact">Start a project</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">One collective · no middlemen</span>
+    <h1 class="headline">Every specialty your business needs, trained under <span class="num">one</span> execution framework.</h1>
+    <p class="sub">
+      Engineering, data, design, media, and growth strategy — one collective,
+      one point of contact, no miscommunication between agencies.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#services">See services</a>
+      <a class="btn-secondary" href="#linkedin">LinkedIn services</a>
+    </div>
+    <div class="hero-stats">
+      <div><b>we offer multiple</b><span>core specializations</span></div>
+      <div><b>1</b><span>work directly with the person building your product,no agency,no handoffs</span></div>
+      <div><b>1:1</b><span>direct inquiry, no middlemen</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="section-head">      <span class="section-eyebrow">What we offer</span>
+      <h2>Tech solutions and services</h2>
+      <p class="lead">Tap any card to see exactly what's included, then send an inquiry directly.</p>
+    </div>
+    <div class="grid" id="servicesGrid"></div>
+    <div style="text-align:center; margin-top:34px;">
+      <button class="btn-secondary" id="seeMoreServicesBtn" style="background:none;">See more →</button>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ads">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-eyebrow">Tech &amp; business world</span>
+      <h2>Around the industry</h2>
+      <p class="lead">A few outside links worth your time — tap a card to read more.</p>
+    </div>
+    <div class="ad-grid" id="adsGrid"></div>
+  </div>
+</section>
+
+<section class="section" id="dual-banners">
+  <div class="wrap"
+    <div class="dual-banner" style="background-image:url('https://i.postimg.cc/8kbkJnj7/Budget-PC-Setup-Ideas-That-Look-Premium.jpg');">
+      <div class="engage-content">
+        <h3 style="color:#fff; font-family:var(--font-display); font-weight:700; font-size:clamp(1.3rem,3vw,1.8rem); margin-bottom:16px;">Fast 24 hour web development</h3>
+        <a class="engage-btn" href="mailto:rrobinhq@gmail.com?subject=Fast%2024%20Hour%20Web%20Development%20Inquiry">Email us</a>
+      </div>
+    </div>
+    <div class="dual-banner" style="background-image:url('https://i.postimg.cc/YCM1NP3h/Take-your-trading-to-the-next-level-with-Prop-Challenge-EA.jpg');">
+      <div class="engage-content">
+        <h3 style="color:#fff; font-family:var(--font-display); font-weight:700; font-size:clamp(1.3rem,3vw,1.8rem); margin-bottom:16px;">Fast data and business analysis</h3>
+        <a class="engage-btn" href="mailto:rrobinhq@gmail.com?subject=Fast%20Data%20%26%20Business%20Analysis%20Inquiry">Email us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section linkedin-section" id="linkedin">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-eyebrow">LinkedIn services</span>
+      <h2>Get your profile and job search working for you</h2>
+      <p class="lead">Paid, upfront services — billed like any other engagement below.</p>
+    </div>
+    <div class="li-grid">
+      <div class="li-card">
+        <h3>LinkedIn Profile Optimization</h3>
+        <p>We rewrite and restructure your own LinkedIn profile so it accurately represents you and performs better with recruiters and search.</p>
+        <ul>
+          <li>Headline, About, and Experience rewrite</li>
+          <li>Keyword and search optimization for your target roles</li>
+          <li>Skills, endorsements, and featured section setup</li>
+          <li>Profile photo and banner guidance</li>
+        </ul>
+        <p class="fee-note">Flat upfront fee, agreed before work begins.</p>
+      </div>
+      <div class="li-card">
+        <h3>Job Search &amp; Application Support</h3>
+        <p>Hands-on help finding and applying to remote roles that fit your background — coaching and execution, not a placement guarantee.</p>
+        <ul>
+          <li>Role sourcing and shortlisting</li>
+          <li>Tailored resume + application materials per role</li>
+          <li>Interview preparation and mock sessions</li>
+          <li>Application tracking and follow-up strategy</li>
+        </ul>
+        <p class="fee-note">Flat upfront fee, agreed before work begins. We do not take a cut of any future salary.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <h2>Tell us what you're building</h2>
+      <p>Send an inquiry and we'll reply with next steps, timeline, and pricing for your project.</p>
+      <a class="btn-primary" href="mailto:rrobinhq@gmail.com?subject=Project%20Inquiry%20-%20R%20ROBIN.COM">Email us</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="engage2">
+  <div class="wrap">
+    <div class="engage-banner engage-banner-2" id="engageBanner2">
+      <div class="engage-content">
+        <h3>Join us for our tech engagements</h3>
+        <button class="engage-btn" id="discoverMoreBtn2">Discover more →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="what-we-offer">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-eyebrow">What we offer</span>
+      <h2>Every capability, at a glance</h2>
+      <p class="lead">Tap anything below to send an inquiry directly.</p>
+    </div>
+    <div class="offer-flat-grid" id="offerFlatGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+
+    <div class="footer-columns">
+      <ul class="footer-col left">
+        <li><button id="footerNavContact">Contact us</button></li>
+        <li><button id="footerNavTerms">Terms</button></li>
+        <li><button id="footerNavWhoWeAre">Who we are</button></li>
+      </ul>
+      <ul class="footer-col right">
+        <li><button id="footerNavBrandProtection">Brand protection</button></li>
+        <li><button id="footerNavPrivacy">Privacy policy</button></li>
+        <li><button id="footerNavWhyPartner">Why partner with us</button></li>
+      </ul>
+    </div>
+
+    <div class="learning-ad">
+      <span class="tag">How to join our community of specialists</span>
+      <h4>Want job opportunities from our clients and partners? Join our team.</h4>
+
+      <p><strong>A welcoming space for passionate specialists</strong><br>
+        No intimidating barriers, no corporate gatekeeping. Our community is built around one idea: an open, supportive environment where junior and senior engineers alike can refine their craft. We've focused on practical, real-world learning — the kind that helps you transition smoothly into high-level software and data engineering.
+      </p>
+
+      <p><strong>Pure skills, no gatekeeping</strong><br>
+        We don't weigh flashy certificates or university titles. Passion, grit, and a willingness to learn matter far more than a piece of paper. Our focus is helping you build real competencies and the confidence to stand alongside seasoned professionals — your portfolio, your creativity, and your drive to solve real problems are all the resume you'll ever need here.
+      </p>
+
+      <ul>
+        <li><strong>Join us as a tech specialist:</strong> Step into our core team to help build our primary applications, maintain our website, and grow your career in a supportive full-time or part-time role.</li>
+        <li><strong>Join our community:</strong> Connect with our wider technical network — entirely free to join — where you can collaborate on active tech contracts, gain real experience, and earn as you learn.</li>
+      </ul>
+
+      <p><strong>A supportive, high-respect community</strong><br>
+        No cold corporate ladder, no unnecessary jargon. We're an inclusive network built on mutual respect, shared knowledge, and a love for building tech that matters. If you have the passion to grow past basic tutorials and build true, production-grade skills in a welcoming environment, our door is open.
+      </p>
+
+      <ul>
+        <li>100% free to join — if you have the bandwidth, drive, and time to spare.</li>
+        <li>Earn as you learn.</li>
+      </ul>
+
+      <p class="fine">
+        We'd love to have you on board. To learn more, explore our open specialist roles, or join our tech community, <a href="mailto:rrobinhq@gmail.com?subject=Insider%20Framework%20Access%20Inquiry">contact us here</a>.
+      </p>
+    </div>
+
+    <div class="engage-banner" id="engageBanner">
+      <div class="engage-content">
+        <h3>Join us for our tech engagements</h3>
+        <button class="engage-btn" id="discoverMoreBtn">Discover more →</button>
+      </div>
+    </div>
+
+    <div class="footer-top">
+      <div class="logo">R <span style="color:var(--accent)">ROBIN</span>.COM</div>
+      <ul class="footer-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#linkedin">LinkedIn</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <p class="copyright">© 2026 R ROBIN.COM. All rights reserved.</p>
+
+    <div class="footer-brand">
+      <img src="https://i.postimg.cc/gjGM4d3h/Gemini-Generated-Image-fsi68bfsi68bfsi6.png" alt="R Robinson Industries logo">
+      <span>A product of R Robinson Industries</span>
+    </div>
+
+    <div class="newsletter-block">
+      <h3>Newsletter</h3>
+      <p contenteditable="true" id="newsletterTeaser">Fill in below to join our community.</p>
+      <button class="newsletter-open-btn" id="newsletterOpenBtn">Newsletter</button>
+    </div>
+  </div>
+</footer>
+
+<div class="discover-overlay" id="discoverOverlay">
+  <div class="discover-topbar">
+    <button class="discover-close" id="discoverClose" aria-label="Close">✕</button>
+  </div>
+  <div class="discover-inner">
+    <div class="discover-head">
+      <h3>Our tech engagements</h3>
+      <p>A closer look at what we're building — reach out about any of them.</p>
+    </div>
+    <div id="discoverGrid"></div>
+    <div id="discoverFooterSlot"></div>
+  </div>
+</div>
+
+<div class="story-overlay" id="storyOverlay">
+  <div class="story-topbar">
+    <button class="discover-close" id="storyClose" aria-label="Close">✕</button>
+  </div>
+  <div class="story-inner">
+    <div class="story-head">
+      <h3>Our tech engagements</h3>
+      <p>A closer look, one story at a time.</p>
+    </div>
+    <div id="storyGrid"></div>
+    <div id="storyFooterSlot"></div>
+  </div>
+</div>
+
+<div class="page-overlay" id="termsOverlay" style="background-image:url('https://i.postimg.cc/59r73fYH/Insights.jpg'); background-color:#f7f8fa;">
+  <div class="page-topbar"><button class="discover-close" data-close-page aria-label="Close">✕</button></div>
+  <div class="page-inner">
+    <div class="page-head"><h3>Terms</h3><p>Tap the text below to edit it.</p></div>
+    <div class="page-textbox" contenteditable="true">By using this website or engaging R ROBIN.COM for any service, you agree to the following terms. All services are provided on a flat, upfront-fee basis unless otherwise agreed in writing — fees are due before work begins, not contingent on any outcome (including employment, revenue, or results generated for your business). Service scope, deliverables, and timelines will be confirmed directly with you before any project starts. R ROBIN.COM retains no ownership over client-provided materials, and final deliverables become the client's property upon full payment, unless a separate licensing agreement is signed. We reserve the right to decline or discontinue any engagement at our discretion, with a fair refund for unstarted or incomplete work. These terms may be updated periodically; continued use of our services after changes constitutes acceptance of the revised terms. Questions about these terms can be sent to our contact email.</div>
+    <div id="termsFooterSlot"></div>
+  </div>
+</div>
+
+<div class="page-overlay" id="privacyOverlay" style="background-image:url('https://i.postimg.cc/1ttBGdy0/Top-Technology-Gadgets-Improving-Everyday-Life.jpg'); background-color:#f7f8fa;">
+  <div class="page-topbar"><button class="discover-close" data-close-page aria-label="Close">✕</button></div>
+  <div class="page-inner">
+    <div class="page-head"><h3>Privacy policy</h3><p>Tap the text below to edit it.</p></div>
+    <div class="page-textbox" contenteditable="true">We collect only the information you choose to give us — through inquiry forms, the newsletter sign-up, or direct email — such as your name, email address, phone number, and the details of what you're interested in. This information is used solely to respond to your inquiry, deliver services you've requested, or send newsletter updates you've opted into. We do not sell, rent, or share your information with third parties for marketing purposes. Newsletter submissions are processed through a third-party form service (Formspree) solely to route your message to us — it is not used for any other purpose. You can ask to have your information removed from our records at any time by emailing us. We do not use invasive tracking or advertising cookies on this site.</div>
+    <div id="privacyFooterSlot"></div>
+  </div>
+</div>
+
+<div class="page-overlay" id="brandProtectionOverlay" style="background-image:url('https://i.postimg.cc/cJ12zXs0/Got-the-gear.jpg'); background-color:#f7f8fa;">
+  <div class="page-topbar"><button class="discover-close" data-close-page aria-label="Close">✕</button></div>
+  <div class="page-inner">
+    <div class="page-head"><h3>Brand protection</h3><p>Tap the text below to edit it.</p></div>
+    <div class="page-textbox" contenteditable="true">The R ROBIN.COM name, logo, and visual identity are the property of R Robinson Industries and may not be reproduced, copied, or used to imply endorsement without written permission. If you believe someone is impersonating R ROBIN.COM, misusing our brand assets, or falsely claiming affiliation with us, please report it to our contact email with as much detail as possible (screenshots, links, or account names). We take brand misuse seriously and will investigate every report. This same standard of care extends to the brand assets we create for our clients — any logos, identity systems, or creative work delivered under a completed engagement are protected under standard intellectual property principles once payment is finalized.</div>
+    <div class="page-fullrow-img"><img src="https://i.postimg.cc/GtzsXLKN/Custom-transport-friendly-open-air-budget-PC.jpg" alt="Brand protection"></div>
+    <div id="brandProtectionFooterSlot"></div>
+  </div>
+</div>
+
+<div class="page-overlay" id="whoWeAreOverlay" style="background-image:url('https://i.postimg.cc/15kyLxd2/Behind-Every-Great-Video-Is-a-Great-Editor.jpg'); background-color:#f7f8fa;">
+  <div class="page-topbar"><button class="discover-close" data-close-page aria-label="Close">✕</button></div>
+  <div class="page-inner">
+    <div class="page-head"><h3>Who we are</h3><p>Every image and text block below is editable.</p></div>
+    <div class="who-block">
+      <div class="who-img"><img src="https://i.postimg.cc/Rh3zDGLN/965599976370905423.jpg" alt="Who we are 1"></div>
+      <div class="who-text" contenteditable="true">R ROBIN.COM started from a simple observation: businesses were losing time and money stitching together separate agencies for engineering, design, data, and growth — each one speaking a different language, working off different timelines, and rarely talking to each other. We built a different model. Every specialist on our team is trained under the same operational and execution framework, so whether you need a backend system, a brand identity, or a data pipeline, you're working with one collective that already knows how to move as a unit.</div>
+    </div>
+    <div class="who-block">
+      <div class="who-img"><img src="https://i.postimg.cc/QCKRbCjJ/Social-Media-Marketing-Visual-Grow-Faster-in-2026.jpg" alt="Who we are 2"></div>
+      <div class="who-text" contenteditable="true">That shared framework is what lets us guarantee consistency across sixteen different disciplines without the usual handoff friction. We don't outsource, and we don't subcontract pieces of your project to strangers — every engagement stays inside the same team from first conversation to final delivery. Our goal isn't just to complete a task; it's to become the single technical and creative partner a growing business can rely on instead of managing five vendors at once.</div>
+    </div>
+    <div id="whoWeAreFooterSlot"></div>
+  </div>
+</div>
+
+<div class="page-overlay" id="whyPartnerOverlay" style="background-image:url('https://i.postimg.cc/tgSqv1GL/Rate-this-setup.jpg'); background-color:#f7f8fa;">
+  <div class="page-topbar"><button class="discover-close" data-close-page aria-label="Close">✕</button></div>
+  <div class="page-inner">
+    <div class="page-head"><h3>Why partner with us</h3><p>Every image and text block below is editable.</p></div>
+    <div class="partner-imgrow">
+      <div class="who-img"><img src="https://i.postimg.cc/rpmc48Rw/Contourner-le-Blocage-de-Compte-Local-sur-Windows-11-Revelations-Exclusives.jpg" alt="Why partner 1"></div>
+      <div class="who-img"><img src="https://i.postimg.cc/4x8Rsr2h/867154103288990548.jpg" alt="Why partner 2"></div>
+    </div>
+    <div class="who-text" contenteditable="true">Most businesses end up managing a patchwork of freelancers and agencies — one for the website, another for the brand, a third for data, a fourth for growth strategy — and spend as much time coordinating between them as getting actual work done. Partnering with R ROBIN.COM means one point of contact, one execution framework, and one team that already understands your project end-to-end. That translates into faster turnaround, fewer miscommunications, and a level of technical consistency that's hard to get when every discipline is handled by a different outside vendor. Whether you need a single service or several working together, you're getting the same standard of care and the same team throughout.</div>
+    <div id="whyPartnerFooterSlot"></div>
+  </div>
+</div>
+
+<div class="page-overlay" id="allServicesOverlay" style="background-image:url('https://i.postimg.cc/jdRmWfvt/Master-Futures-Trading-with-Inversion-Imbalance-Zones-(95-Win-Rate).jpg'); background-color:#0b1220;">
+  <div class="page-topbar"><button class="discover-close" data-close-page aria-label="Close">✕</button></div>
+  <div class="page-inner" style="max-width:960px;">
+    <div class="page-head"><h3>All our services</h3><p>Tap anything below to send an inquiry directly.</p></div>
+    <div class="all-services-grid" id="allServicesGrid"></div>
+    <div id="allServicesFooterSlot"></div>
+  </div>
+</div>
+
+<div class="page-overlay" id="newsletterFormOverlay" style="background-image:url('https://i.postimg.cc/wxhK7t4r/Remote-Services.jpg'); background-color:#f7f8fa;">
+  <div class="page-topbar"><button class="discover-close" data-close-page aria-label="Close">✕</button></div>
+  <div class="page-inner">
+    <div class="page-head"><h3>Join our newsletter</h3><p>Tell us a bit about yourself and what you're interested in.</p></div>
+    <div class="newsletter-form-box">
+      <form id="newsletterForm">
+        <div class="nf-row">
+          <input type="text" id="nfFirstName" placeholder="First name" required>
+          <input type="text" id="nfLastName" placeholder="Last name" required>
+        </div>
+        <div class="nf-row">
+          <input type="tel" id="nfMobile" placeholder="Mobile number" required>
+          <input type="email" id="nfEmail" placeholder="Email" required>
+        </div>
+        <label class="nf-label">What are you interested in?</label>
+        <div class="nf-interests" id="nfInterests"></div>
+        <label class="nf-consent">
+          <input type="checkbox" id="nfConsentComms">
+          I agree to receive any other communication from R ROBIN.COM.
+        </label>
+        <label class="nf-consent">
+          <input type="checkbox" id="nfConsentNewsletter">
+          I agree that R ROBIN.COM sends me its newsletter by email.
+        </label>
+        <button type="submit" class="nf-submit" id="nfSubmitBtn">Submit</button>
+        <p class="nf-status" id="nfStatus"></p>
+      </form>
+    </div>
+    <div id="newsletterFormFooterSlot"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <span class="modal-index" id="modalIndex"></span>
+    <h3 id="modalTitle"></h3>
+    <p class="desc" id="modalDesc"></p>
+    <span class="provided-label">Services provided</span>
+    <ul id="modalList"></ul>
+    <div class="inquire-box">
+      <label for="inquireNote">Quick note for your inquiry (optional)</label>
+      <textarea id="inquireNote" placeholder="Tell us a bit about what you need..."></textarea>
+      <button class="inquire-btn" id="inquireBtn">Inquire about this service</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const services = [
+    {
+      title: "Software Engineering",
+      teaser: "Production-grade systems, built to scale.",
+      desc: "End-to-end architecture, development, and scaling of robust, production-grade software systems — low-level and high-level programming, systems design, and algorithmic optimization.",
+      list: ["Enterprise software development", "Systems architecture design", "Backend infrastructure engineering", "Algorithm optimization", "Database architecture design", "Systems integration", "API development", "Legacy system modernization"],
+      img: "https://i.postimg.cc/KvFYWKYp/2603712279895346.jpg"
+    },
+    {
+      title: "Software Development",
+      teaser: "Modern web and mobile apps, shipped fast.",
+      desc: "Agile creation and deployment of modern web and mobile applications — rapid feature implementation, clean code delivery, and cross-platform compatibility.",
+      list: ["Web application development", "Mobile application development", "Full-stack development", "Front-end development", "E-commerce platform building", "Custom API integration", "Continuous integration & deployment (CI/CD)", "Cross-platform app deployment", "Software feature implementation"],
+      img: "https://i.postimg.cc/VNb1v16M/11188699075578638.jpg"
+    },
+    {
+      title: "Data Analytics",
+      teaser: "Raw data, turned into decisions.",
+      desc: "Transforming complex, fragmented raw data into structured, actionable business intelligence — descriptive statistics, visualization, and spotting operational bottlenecks.",
+      list: ["Business intelligence", "Executive dashboard building", "Sales funnel tracking", "KPI performance monitoring", "Descriptive statistics", "Data visualization", "Operational bottleneck identification", "Database querying (SQL)", "Data-driven reporting"],
+      img: "https://i.postimg.cc/QMcPvMCY/360428776453082435.jpg"
+    },
+    {
+      title: "Data Science",
+      teaser: "Advanced modeling for strategic decisions.",
+      desc: "Applying advanced scientific methods, processes, and algorithms to extract deep insight from structured and unstructured data.",
+      list: ["Statistical modeling", "Predictive analytics", "Market trend forecasting", "Advanced data mining", "Pattern recognition", "Machine learning modeling", "Big data processing", "Customer segmentation analysis"],
+      img: "https://i.postimg.cc/4NVXXXYz/Great-Books-for-Data-Science.jpg"
+    },
+    {
+      title: "AI Career Essentials",
+      teaser: "AI tools, built into daily operations.",
+      desc: "Strategic application of generative AI and digital productivity tools to optimize daily business operations, research, and communication.",
+      list: ["AI-powered market research", "Automated document drafting", "Digital workspace optimization", "AI workflow acceleration", "Smart scheduling configuration", "Prompts for office productivity"],
+      img: "https://i.postimg.cc/fTGQPp5K/Graduation-Cap-with-2026-Tassel.jpg"
+    },
+    {
+      title: "Virtual Assistance",
+      teaser: "Remote operations, run with precision.",
+      desc: "High-level administrative, project, and operational management executed remotely with strict adherence to your workflows.",
+      list: ["Remote operations management", "Executive calendar management", "Inbox optimization", "Client communication tracking", "Data organization", "Project task management", "Administrative workflow tracking", "Travel and logistics planning", "Virtual meeting coordination"],
+      img: "https://i.postimg.cc/HxqFN74N/download-(1).jpg"
+    },
+    {
+      title: "AI for Developers",
+      teaser: "LLMs, wired straight into your dev cycle.",
+      desc: "Integrating large language models, custom prompting pipelines, and AI automation tools directly into the software development life cycle.",
+      list: ["Internal AI tool building", "Automated code refactoring", "Prompt engineering for developers", "AI-assisted programming", "LLM application integration", "Code debugging automation", "Automated documentation generation"],
+      img: "https://i.postimg.cc/jSkXSYwX/AI-Won-t-Replace-You-If-You-Know-How-to-Use-It-Future-Skills-2026.jpg"
+    },
+    {
+      title: "Cybersecurity",
+      teaser: "Harden your systems before someone else finds the gap.",
+      desc: "Defensive architecture, digital asset protection, network hardening, and proactive risk mitigation for your organization's data.",
+      list: ["Penetration testing", "Vulnerability assessments", "Network hardening", "Security protocol implementation", "Threat monitoring", "Incident response planning", "Corporate data protection audits", "Identity & access management", "Cybersecurity compliance checking"],
+      img: "https://i.postimg.cc/DwFVPsxw/White-Hats-Ethical-Hacking-in-Practice-(1).jpg"
+    },
+    {
+      title: "Data Engineering",
+      teaser: "The pipelines that move your data safely.",
+      desc: "Design, construction, and maintenance of the data architecture, data lakes, and pipelines needed to move and transform large data streams securely.",
+      list: ["Data pipeline engineering", "ETL pipeline construction", "Data warehouse architecture", "Large-scale data storage management", "Data pipeline automation", "Data lake creation", "Data ingestion setup", "Database normalization"],
+      img: "https://i.postimg.cc/fWXgqytQ/73253931435466898.jpg"
+    },
+    {
+      title: "Graphic Design",
+      teaser: "A brand that looks like it means it.",
+      desc: "Creation of cohesive, premium visual communication assets and corporate brand identities that articulate your value proposition.",
+      list: ["Corporate brand identity design", "Logo design", "Visual systems engineering", "Investor pitch decks", "Marketing presentation design", "Social media brand kits", "Digital advertising design", "Print collateral design", "Brand style guide creation"],
+      img: "https://i.postimg.cc/zXGKbPrN/Local-Graphic-Design-Excellence-Fowler-Where-Community-Meets-Creativity.jpg"
+    },
+    {
+      title: "Content Creation",
+      teaser: "Stories that travel across every channel.",
+      desc: "Data-driven digital storytelling, copywriting, and media strategy designed to engage your audience across channels.",
+      list: ["Digital content strategy", "Website copywriting", "SEO blog writing", "Corporate scriptwriting", "Email newsletter campaigns", "Social media content pipelines", "Technical writing", "Copyediting & proofreading"],
+      img: "https://i.postimg.cc/bN5DGygy/455145106118011843-(1).jpg"
+    },
+    {
+      title: "Founders Academy",
+      teaser: "From idea to operating business.",
+      desc: "Strategic incubation, structuring, scaling, and operational management of high-growth ventures from the ground up.",
+      list: ["Venture business modeling", "Strategic go-to-market planning", "Competitive market analysis", "Scalable pricing strategies", "Operational scaling blueprints", "Financial forecasting models", "Startup pitch preparation"],
+      img: "https://i.postimg.cc/MKnX8kwk/Payhip-Create-a-free-website-and-sell-online.jpg"
+    },
+    {
+      title: "Freelancer Academy",
+      teaser: "Run your freelance work like a business.",
+      desc: "Independent project management, scope-of-work engineering, client negotiation frameworks, and high-efficiency delivery.",
+      list: ["Project scoping", "Milestone tracking", "Scope-of-work engineering", "Client negotiation framework setup", "Contract service structuring", "Independent technical consulting", "Service level agreement (SLA) drafting"],
+      img: "https://i.postimg.cc/DzPwcnrL/Freelencing-Websites.jpg"
+    },
+    {
+      title: "UX/UI Design",
+      teaser: "Interfaces people actually enjoy using.",
+      desc: "Mapping user journeys, rapid wireframing, and building highly interactive, intuitive digital product interfaces.",
+      list: ["User research", "Persona mapping", "User journey mapping", "Low-fidelity wireframing", "High-fidelity wireframing", "Interactive prototyping (Figma)", "User interface auditing", "Usability testing"],
+      img: "https://i.postimg.cc/YSMp0Z5Y/UI-UX-Design-Guide-What-Are-UI-Designers-and-How-Are-They-Different-Than-UX-Designers.jpg"
+    },
+    {
+      title: "Animation",
+      teaser: "Motion that explains the hard stuff fast.",
+      desc: "Production of dynamic 2D and 3D visual assets, motion graphics, and animated sequences that explain complex ideas.",
+      list: ["Animated explainer videos", "Motion graphics production", "2D conceptual animation", "3D product animation", "Animated promotional materials", "Digital product micro-animations", "Kinetic typography production"],
+      img: "https://i.postimg.cc/x1SQpBTy/Volver-a-dibujar-en-una-Wacom-Cintiq-22-es.jpg"
+    },
+    {
+      title: "Film",
+      teaser: "Cinematic production, start to finish.",
+      desc: "Full-scale, cinematic visual production from pre-production scripting and directing through post-production and sound design.",
+      list: ["Cinematic video production", "Brand documentaries", "Video advertisement production", "Corporate promotional videos", "Pre-production scripting", "Video directing", "Post-production editing", "Color grading", "Sound design & audio engineering"],
+      img: "https://i.postimg.cc/W3tcJvXz/25332816648950920.jpg"
+    }
+  ];
+
+  const grid = document.getElementById('servicesGrid');
+  services.forEach((s, i) => {
+    const card = document.createElement('button');
+    card.className = 'card';
+    card.setAttribute('aria-haspopup', 'dialog');
+    card.innerHTML = `
+      <img class="card-img" src="${s.img}" alt="${s.title}" loading="lazy">
+      <div class="card-body">
+        <span class="card-title">${s.title}</span>
+        <span class="card-teaser">${s.teaser}</span>
+        <span class="card-more">View details →</span>
+      </div>
+    `;
+    card.addEventListener('click', () => openModal(i));
+    grid.appendChild(card);
+  });
+
+  const overlay   = document.getElementById('modalOverlay');
+  const modalIdx  = document.getElementById('modalIndex');
+  const modalTtl  = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalList = document.getElementById('modalList');
+  const inquireBtn = document.getElementById('inquireBtn');
+  const inquireNote = document.getElementById('inquireNote');
+
+  const INQUIRY_EMAIL = "rrobinhq@gmail.com";
+
+  function openModal(i) {
+    const s = services[i];
+    modalIdx.textContent = '';
+    modalTtl.textContent = s.title;
+    modalDesc.textContent = s.desc;
+    modalList.innerHTML = s.list.map(item => `<li>${item}</li>`).join('');
+    inquireNote.value = `I'm interested in your "${s.title}" service.`;
+
+    inquireBtn.onclick = () => {
+      const subject = encodeURIComponent(`Inquiry: ${s.title} — R ROBIN.COM`);
+      const noteText = inquireNote.value.trim();
+      const body = encodeURIComponent(
+        `Hi R ROBIN.COM,\n\nI'd like to talk about your "${s.title}" service.\n\n` +
+        (noteText ? `Details: ${noteText}\n\n` : '') +
+        `Thanks!`
+      );
+      window.location.href = `mailto:${INQUIRY_EMAIL}?subject=${subject}&body=${body}`;
+    };
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  const ads = [
+    {
+      tag: "Tech industry",
+      title: "Where AI is actually headed in 2026",
+      copy: "A look at how enterprise teams are adopting AI tools this year, and what's hype versus what's sticking.",
+      img: "https://picsum.photos/seed/rrobin-ad1/700/500",
+      link: "https://www.infoworld.com/article/4151572/the-starkly-uneven-reality-of-enterprise-ai-adoption.html"
+    },
+    {
+      tag: "Business growth",
+      title: "The remote-hiring playbook companies are using now",
+      copy: "How distributed teams are structuring interviews, onboarding, and retention in a remote-first market.",
+      img: "https://picsum.photos/seed/rrobin-ad2/700/500",
+      link: "https://searchpartyrecruiting.com/remote-hiring-guide-2026/"
+    },
+    {
+      tag: "Tech industry",
+      title: "Cybersecurity budgets are shifting — here's where",
+      copy: "A breakdown of where mid-size companies are actually spending on security this year.",
+      img: "https://picsum.photos/seed/rrobin-ad3/700/500",
+      link: "https://www.picussecurity.com/resource/blog/optimize-cybersecurity-budget"
+    },
+    {
+      tag: "Business growth",
+      title: "Why more founders are skipping the agency route",
+      copy: "The case for a single embedded team over stitching together five separate vendors.",
+      img: "https://picsum.photos/seed/rrobin-ad4/700/500",
+      link: "https://newagesysit.com/blog/one-technology-partner-vs-multiple-it-vendors/"
+    },
+    {
+      tag: "Tech industry",
+      title: "Data engineering is quietly becoming the bottleneck",
+      copy: "Why so many AI initiatives stall out before they ever reach a model.",
+      img: "https://picsum.photos/seed/rrobin-ad5/700/500",
+      link: "https://kestra.io/blogs/2026-03-05-data-eng-trends-2026"
+    },
+    {
+      tag: "Business growth",
+      title: "The freelance economy just hit a new milestone",
+      copy: "What the latest numbers say about independent, contract-based work worldwide.",
+      img: "https://picsum.photos/seed/rrobin-ad6/700/500",
+      link: "https://www.selfemployed.com/news/freelance-economy-growth/"
+    }
+  ];
+
+  const adsGrid = document.getElementById('adsGrid');
+  ads.forEach((ad) => {
+    const card = document.createElement('a');
+    card.className = 'ad-card';
+    card.href = ad.link;
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.innerHTML = `
+      <img class="ad-card-img" src="${ad.img}" alt="${ad.title}" loading="lazy">
+      <div class="ad-card-body">
+        <span class="ad-card-tag">${ad.tag}</span>
+        <span class="ad-card-title">${ad.title}</span>
+        <span class="ad-card-copy">${ad.copy}</span>
+        <span class="ad-card-link">Click here →</span>
+      </div>
+    `;
+    adsGrid.appendChild(card);
+  });
+
+  const CONTACT_EMAIL = "rrobinhq@gmail.com";
+
+  const discoverItems = [
+    { img: "https://picsum.photos/seed/rrobin-discover1/900/600", text: `1. The Prototype Horizon: An Internalized, Closed-Door Hackathon<br>Time: 19:00 – 06:00<br><br>Colleagues, You are formally invited to The Prototype Horizon, a strictly internalized, invitation-only hackathon capped at an ultra-exclusive minimum of thirty seats. This closed-door session bypasses generic application building to force real-time engineering under extreme constraints. This is a blind-box system architecture sprint; the data payloads, physical constraints, and distributed environments will only be unsealed at the strike of 19:00. If you are looking to test the absolute breaking limits of your concurrent programming and rapid runtime synthesis alongside the department's top analytical minds, your seat is reserved. Bring your bare-metal environments and zero-latency frameworks.` },
+    { img: "https://picsum.photos/seed/rrobin-discover2/900/600", text: `2. Advanced Practicum: Systematic Code Refactoring via Algorithmic Code Smells Detection<br>Time: 19:00 – 06:00<br><br>Abstract For Review: The Department invites senior researchers and systems architects to an intensive overnight development sprint focused on the operationalization of Static Code Representation Learning for Automated Refactoring. Traditional manual code reviews fail to scale against deeply nested architectural degradation and anti-patterns. This session will focus entirely on constructing custom AST-driven (Abstract Syntax Tree) and Control-Flow Graph (CFG) parsers to automate the detection of structural code smells (such as mutable state leakage, divergent change, and cyclic package dependencies). We will build multi-layered graph attention networks to calculate programmatic refactoring vectors, ensuring that the generated structural patches are provably sound and semantically invariant. This is not basic formatting; it is compile-time semantic optimization.` },
+    { img: "https://picsum.photos/seed/rrobin-discover3/900/600", text: `3. Architecture Deep-Dive: Overnight Full-Stack Systems Cooperation & Language Internals<br>Time: 19:00 – 06:00<br><br>Invitation Details: We are gathering for an overnight cooperative deep-dive into the raw internals of high-throughput web systems and programming language runtimes. The goal of this overnight session is to dismantle the abstractions of modern web frameworks. We will spend the first half of the night tracing language execution paths down to the metal—analyzing V8 memory allocation, garbage collection pauses, and multi-threaded event loops. The second half of the night will be spent cooperatively engineering a distributed system capable of processing asynchronous data ingestion under heavy network simulation. If you want to move past standard API endpoints and master low-level architectural optimizations, this overnight build session is mandatory.` },
+    { img: "https://picsum.photos/seed/rrobin-discover4/900/600", text: `4. The Vanguard Circle: Advanced Peer & Senior Research Mentorship<br>Time: 19:00 – 06:00<br><br>Memorandum: You are cordially invited to The Vanguard Circle, an elite overnight mentorship block bridging the gap between foundational development and doctoral-level system design. This night features direct, unvarnished architectural critiques and guidance from seasoned engineering mentors who have scaled systems to hundreds of millions of requests. Bring your active research papers, your broken distributed system topologies, or your unoptimized database engines. This is a raw, deep-dive evaluation session where your code paradigms will be picked apart and reconstructed to meet world-class engineering standards.` },
+    { img: "https://picsum.photos/seed/rrobin-discover5/900/600", text: `5. The Cinematic Breakdown: All-Night Kenyan Noir & Riverwood Masterpieces<br>Time: 19:00 – 06:00<br><br>Hey team, Time to close the IDEs, step away from the compilers, and pull up a seat! We're running an all-night, non-stop movie marathon dedicated entirely to Kenyan Cinema. We are diving deep into the absolute best our local film industry has to offer—from gritty Nairobi crime thrillers and sharp political dramas to classic, high-energy Riverwood action spectacles and psychological indies. We've got the projector set up, massive sound systems ready, and unlimited snacks to power us through the night. Come unwind, debate plotlines, appreciate the incredible cinematography coming straight out of Nairobi, and just chill with the crew.` },
+    { img: "https://picsum.photos/seed/rrobin-discover6/900/600", text: `6. Lab 0x0F: The Harvard CS200-Grade Advanced Systems Engineering Sprint<br>Time: 19:00 – 06:00<br><br>Syllabus & Invitation: Welcome to Lab 0x0F. This overnight computer science sprint is modeled directly after the upper-level post-graduate curricula at Harvard, specifically targeting advanced systems programming. We are bypassing high-level abstractions to work directly in unmanaged memory environments ($C$/Rust). The night's task centers on building a custom virtual memory manager and thread scheduler from scratch. You will handle manual page table mappings, cache eviction thrashing mitigation, and atomic context switching locks. This lab requires complete comprehension of hardware-software boundary dynamics and operating system kernels. If you want a taste of the most brutal academic systems engineering in the world, show up with a fully charged machine.` },
+    { img: "https://picsum.photos/seed/rrobin-discover7/900/600", text: `7. Ph.D. Colloquium: Non-Parametric Spatial Optimization & Topological Data Analysis<br>Time: 19:00 – 06:00<br><br>Colloquium Invitation: We invite doctoral candidates and data engineers to an overnight analytical symposium focusing on Topological Data Analysis (TDA) and Persistent Homology for Non-Euclidean Data Manifolds. Standard multivariate regressions and parametric statistical clustering collapse when encountering complex, high-dimensional data topologies hidden within massive enterprise feature spaces. This professional session will actively develop frameworks using Vietoris-Rips complexes to extract robust structural shapes and invariants from noisy, unorganized datasets. We will mathematically track how topological features persist across varying spatial scales, optimizing multi-dimensional business and logistics patterns without relying on restrictive parametric distribution assumptions.` },
+    { img: "https://picsum.photos/seed/rrobin-discover8/900/600", text: `8. The Byte-Shift Arcade: All-Night Strategy & High-Stakes Tabletop Gaming<br>Time: 19:00 – 06:00<br><br>Yo! The ultimate overnight showdown is locked in. We're transforming the main lab into an all-out Game Night arena from dusk until dawn. Whether you are looking to destroy friendships in ruthless tactical board games, run high-intensity co-op video game campaigns, or test your poker face in long strategy rounds, this is where you need to be. We're keeping the energy at a solid 100 with massive multiplayer setups, custom arcade retro-rigs, and enough caffeine to survive the 4 AM slump. Show up, bring your competitive edge, and let's see who is left standing when the sun comes up!` }
+  ];
+
+  const discoverGrid = document.getElementById('discoverGrid');
+  discoverItems.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'discover-card';
+    const subject = encodeURIComponent(`Inquiry — Engagement ${i + 1} — R ROBIN.COM`);
+    card.innerHTML = `
+      <img class="discover-card-img" src="${item.img}" alt="Engagement ${i + 1}" loading="lazy">
+      <div class="discover-card-body">
+        <p class="discover-card-text">${item.text}</p>
+        <a class="discover-contact" href="mailto:${CONTACT_EMAIL}?subject=${subject}">Contact us</a>
+      </div>
+    `;
+    discoverGrid.appendChild(card);
+  });
+
+  function buildOverlayFooter(dark) {
+    return `
+      <div class="overlay-footer ${dark ? 'on-dark' : ''}">
+        <a href="#services" class="overlay-footer-link">Services</a>
+        <a href="#linkedin" class="overlay-footer-link">LinkedIn</a>
+        <a href="#ads" class="overlay-footer-link">Trending</a>
+        <a href="mailto:${INQUIRY_EMAIL}" class="overlay-footer-link">Contact us</a>
+      </div>
+    `;
+  }
+  function closeAllOverlays() {
+    discoverOverlay.classList.remove('open');
+    storyOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('discoverFooterSlot').innerHTML = buildOverlayFooter(true);
+
+  const storyItems = [
+    { text: `1. Differentiable Programming and Neural-Symbolic Software Architectures<br><br>Traditional software relies on discrete, deterministic logic (if/else loops, absolute state machines). Advanced PhD research in software engineering is pivoting toward Differentiable Programming (∂P), a paradigm where software systems are treated as parameterized mathematical functions that can be optimized using gradient descent. Rather than compiling fixed instructions, components of an enterprise architecture are left "open," allowing neural components to learn optimal internal control loops dynamically.<br><br>The ultimate evolution of this is Neural-Symbolic Architecture, which attempts to resolve the biggest flaw of modern AI: the lack of formal verifiability. PhD researchers are building hybrid systems where a deep learning model handles pattern recognition or unstructured ingestion, but pipes its output directly into a formal symbolic logic compiler. If the neural network proposes an operation that violates predefined mathematical constraints or business invariants, the symbolic layer rejects it or applies an exact counter-proof, creating self-correcting software that learns without losing predictability.`, img: "https://picsum.photos/seed/rrobin-story1/1200/700" },
+    { text: `2. Physical Data Layout Synthesis and Autonomic Database Tuning via Reinforcement Learning<br><br>Data systems are becoming too structurally complex for human database administrators (DBAs) to manage. PhD research in modern data engineering heavily focuses on Autonomic Data Architecture, where a system dynamically mutates its own physical storage layout based on incoming workload telemetry. Using deep reinforcement learning agents (such as customized Deep Q-Networks), these next-generation databases monitor millisecond-level query patterns.<br><br>If the agent detects a sudden shift in read/write distribution, it automatically decides when to synthesize custom index structures, partition tables horizontally or vertically, or alter cache eviction policies on the fly without human intervention. Furthermore, researchers are exploring learned index structures, substituting traditional B-Trees and LSM-Trees with lightweight, continuous ML models that predict the approximate memory address of a record based on its key value, reducing indexing memory overhead by up to 90% and accelerating point-lookups to algorithmic limits.`, img: "https://picsum.photos/seed/rrobin-story2/1200/700" },
+    { text: `3. Formal Verification of Distributed Consensus Protocols and Smart Contracts<br><br>In mass-scale distributed systems and decentralized ledger environments, a single concurrency bug (like a race condition or a split-brain scenario) can result in systemic failure or catastrophic financial loss. PhD researchers in formal methods are developing automated systems to mathematically prove the correctness of distributed software before compilation. Using theorem provers like Coq, TLA+, and Isabelle, software engineers write structural specs that map out every conceivable state permutation of a distributed consensus protocol (like Paxos, Raft, or Byzantine Fault Tolerant variants).<br><br>The frontier of this research focuses on Automated Synthesis, where the formal proof tool doesn't just verify existing code, but actually generates the final, production-ready implementation directly from the mathematical logic. This guarantees that the compiled software is structurally immune to deadlocks, state corruption, or transaction re-ordering exploits.`, img: "https://picsum.photos/seed/rrobin-story3/1200/700" },
+    { text: `4. Approximate Query Processing (AQP) and Dynamic Stream Sketching Algorithms<br><br>As enterprise data volumes surge into the exabyte scale, executing exact queries across massive distributed data streams becomes physically constrained by network bandwidth and memory speed. Data engineering PhDs are tackling this through Approximate Query Processing (AQP) using advanced streaming sketch algorithms. Instead of scanning billions of rows to compute an exact metric, the system processes streaming data through hyper-compact mathematical summaries known as sketches (e.g., Count-Min Sketches, HyperLogLog, and t-Digests).<br><br>Current research focuses on optimizing these data structures to adapt dynamically to highly volatile, multi-modal data distributions. By leveraging structural bounds like Hoeffding's inequalities, these streaming engines process millions of events per second on nominal hardware, providing real-time analytical answers with a mathematically guaranteed error bound (e.g., "Result is 42.06 within a ±0.01% margin of error with 99.9% confidence"), allowing systems to scale limitlessly.`, img: "https://picsum.photos/seed/rrobin-story4/1200/700" },
+    { text: `5. Chaos Engineering Automation and Ephemeral Microservices Orchestration<br><br>Modern cloud-native software architectures consist of thousands of loosely coupled microservices interacting asynchronously. Predicting failure modes in these highly distributed environments is incredibly difficult. Advanced software engineering research is driving Autonomous Chaos Engineering, moving past manual fault injection (like killing a container) toward algorithmic vulnerability discovery. Researchers are using evolutionary algorithms and graph neural networks (GNNs) to construct real-time topological maps of runtime microservice calls.<br><br>The chaos engine uses these maps to deliberately discover and exploit hidden structural weaknesses, such as cascading timeouts, cyclic dependencies, or asymmetric network partitions that human engineers would never foresee. Simultaneously, research into ephemeral microservices seeks to build architectures where microservice instances spin up, execute a singular request, and dissolve within milliseconds, radically shrinking the attack surface and mitigating long-term memory leak vulnerabilities.`, img: "https://picsum.photos/seed/rrobin-story5/1200/700" },
+    { text: `6. Edge-Native Data Engineering and Decentralized Federated Stream Processing<br><br>The traditional architectural paradigm of collection, central accumulation, and subsequent batch processing is broken by the explosion of IoT and edge devices. PhD research in data engineering is heavily inverted toward Edge-Native Processing paradigms. The goal is to move the computation engine entirely onto low-powered distributed edge nodes, processing data at the exact physical point of ingestion.<br><br>This requires the development of decentralized stream-processing frameworks capable of executing continuous queries across highly unstable, low-bandwidth, and intermittent network topologies. Researchers are designing specialized windowing semantics and fault-tolerance mechanisms that rely on localized peer-to-peer state replication, allowing edge networks to run complex analytics, filter out noise, and execute localized machine learning inference without ever needing to rely on a centralized cloud server.`, img: "https://picsum.photos/seed/rrobin-story6/1200/700" },
+    { text: `7. Static Code Representation Learning and Automated Program Repair (APR)<br><br>The intersection of Natural Language Processing and compilers has birthed the field of Program Representation Learning. PhD researchers are moving away from treating source code as simple text strings or even rigid Abstract Syntax Trees (ASTs). Instead, they are compiling code into multi-dimensional graph topologies that model structural, control-flow, and data-flow dependencies simultaneously.<br><br>By training specialized deep learning architectures (like Graph Attention Networks) on these multi-layered code representations, researchers are building highly advanced Automated Program Repair (APR) systems. Unlike current AI coding assistants that simply guess text completions, these advanced systems analyze compiling errors or runtime security vulnerabilities, mathematically calculate a provably valid patch structure, and automatically rewrite the production codebase while maintaining structural integrity.`, img: "https://picsum.photos/seed/rrobin-story7/1200/700" },
+    { text: `8. Privacy-Preserving Data Engineering: Homomorphic Encryption and Secure Multi-Party Computation at Scale<br><br>In an era of strict privacy regulations and systemic data breaches, data engineering programs are heavily focused on the operationalization of Privacy-Preserving Computation architectures. Historically, data had to be decrypted before it could be queried or used to train an ML model, exposing it to potential theft. PhD researchers are optimizing Fully Homomorphic Encryption (FHE) and Secure Multi-Party Computation (SMPC) algorithms to run efficiently inside highly distributed data pipelines.<br><br>FHE allows software and data systems to execute mathematical operations (like calculating an average, sorting, or running an analytical join) directly on ciphertext. The database processes encrypted text and outputs an encrypted result, which only the end-user can decrypt with their private key. The current research frontier lies in drastically reducing the massive computational overhead of FHE—which historically slowed operations down by orders of magnitude—bringing it closer to native execution speeds for enterprise data infrastructure.`, img: "https://picsum.photos/seed/rrobin-story8/1200/700" },
+    { text: `9. Geometric Deep Learning for Spatio-Temporal Data Graphs<br><br>Standard data engineering frameworks are optimized for Euclidean data formats—structured relational rows, fixed time-series arrays, or grid-based image pixels. However, the most critical global data problems (such as neural mapping, global supply chain dependencies, and global logistical routing systems) exist as highly non-Euclidean, evolving multi-graphs. PhD research at the intersection of data engineering and theoretical computer science focuses on Geometric Deep Learning (GDL) applied to massive Spatio-Temporal Data Graphs.<br><br>Researchers are building architectural pipelines capable of computing continuous representation space embeddings for dynamic graphs whose vertices, edges, and features alter dynamically over time. The mathematical core involves developing permutation-invariant and scale-invariant Graph Neural Networks (GNNs) that preserve structural symmetries. This allows data systems to run predictive modeling on massive topology shifts, like foreseeing distributed structural failures in global infrastructure or traffic flows across vast multi-modal transportation networks under extreme anomalous stress.`, img: "https://picsum.photos/seed/rrobin-story9/1200/700" },
+    { text: `10. Hardware-Software Co-Design for Post-Moore Scaling and Custom Accelerator Compilation<br><br>As Moore's Law hits hard physical boundaries, software can no longer rely on general-purpose CPUs to achieve orders-of-magnitude performance gains. The absolute cutting edge of Software Engineering PhD programs is focused on Hardware-Software Co-Design, specifically the automated generation of custom domain-specific compute accelerators (like ASICs and FPGAs) directly from high-level software code. Using Intermediate Representations (IR) such as MLIR (Multi-Level Intermediate Representation), researchers are bypassing standard silicon compilation bottlenecks.<br><br>Software engineers write abstract data pipelines or programmatic execution paths, and the specialized compiler analyzes the data dependencies to mathematically synthesize a custom hardware spatial accelerator layout. This architecture custom-maps memory registers, execution pipelines, and data routers directly to the code's mathematical structure. The resulting co-designed system yields massive increases in throughput and reductions in energy consumption, paving the way for sustainable exascale software systems running on post-silicon compute nodes.`, img: "https://picsum.photos/seed/rrobin-story10/1200/700" }
+  ];
+
+  const storyGrid = document.getElementById('storyGrid');
+  storyItems.forEach((item, i) => {
+    const block = document.createElement('div');
+    block.className = 'story-block';
+    block.innerHTML = `
+      <p class="story-text">${item.text}</p>
+      <div class="story-img"><img src="${item.img}" alt="Story ${i + 1}" loading="lazy"></div>
+    `;
+    storyGrid.appendChild(block);
+  });
+  document.getElementById('storyFooterSlot').innerHTML = buildOverlayFooter(false);
+
+  const storyOverlay      = document.getElementById('storyOverlay');
+  const discoverMoreBtn2  = document.getElementById('discoverMoreBtn2');
+  const storyCloseBtn     = document.getElementById('storyClose');
+
+  discoverMoreBtn2.addEventListener('click', () => {
+    storyOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  storyCloseBtn.addEventListener('click', closeAllOverlays);
+
+  document.querySelectorAll('.overlay-footer-link').forEach(link => {
+    link.addEventListener('click', closeAllOverlays);
+  });
+
+  const discoverOverlay   = document.getElementById('discoverOverlay');
+  const discoverMoreBtn   = document.getElementById('discoverMoreBtn');
+  const discoverCloseBtn  = document.getElementById('discoverClose');
+
+  discoverMoreBtn.addEventListener('click', () => {
+    discoverOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  discoverCloseBtn.addEventListener('click', closeAllOverlays);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAllOverlays();
+  });
+
+  const newPageOverlays = [
+    'termsOverlay', 'privacyOverlay', 'brandProtectionOverlay',
+    'whoWeAreOverlay', 'whyPartnerOverlay', 'allServicesOverlay', 'newsletterFormOverlay'
+  ].map(id => document.getElementById(id));
+
+  function closeAllPageOverlays() {
+    newPageOverlays.forEach(el => el.classList.remove('open'));
+    document.body.style.overflow = '';
+  }
+  function openPageOverlay(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  document.querySelectorAll('[data-close-page]').forEach(btn => {
+    btn.addEventListener('click', closeAllPageOverlays);
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllPageOverlays(); });
+
+  document.getElementById('termsFooterSlot').innerHTML = buildOverlayFooter(false);
+  document.getElementById('privacyFooterSlot').innerHTML = buildOverlayFooter(false);
+  document.getElementById('brandProtectionFooterSlot').innerHTML = buildOverlayFooter(false);
+  document.getElementById('whoWeAreFooterSlot').innerHTML = buildOverlayFooter(false);
+  document.getElementById('whyPartnerFooterSlot').innerHTML = buildOverlayFooter(false);
+  document.getElementById('allServicesFooterSlot').innerHTML = buildOverlayFooter(true);
+  document.getElementById('newsletterFormFooterSlot').innerHTML = buildOverlayFooter(false);
+  document.querySelectorAll('#termsFooterSlot a, #privacyFooterSlot a, #brandProtectionFooterSlot a, #whoWeAreFooterSlot a, #whyPartnerFooterSlot a, #allServicesFooterSlot a, #newsletterFormFooterSlot a')
+    .forEach(a => a.addEventListener('click', closeAllPageOverlays));
+
+  document.getElementById('footerNavContact').addEventListener('click', () => {
+    window.location.href = `mailto:${INQUIRY_EMAIL}?subject=Contact%20-%20R%20ROBIN.COM`;
+  });
+  document.getElementById('footerNavTerms').addEventListener('click', () => openPageOverlay('termsOverlay'));
+  document.getElementById('footerNavWhoWeAre').addEventListener('click', () => openPageOverlay('whoWeAreOverlay'));
+  document.getElementById('footerNavBrandProtection').addEventListener('click', () => openPageOverlay('brandProtectionOverlay'));
+  document.getElementById('footerNavPrivacy').addEventListener('click', () => openPageOverlay('privacyOverlay'));
+  document.getElementById('footerNavWhyPartner').addEventListener('click', () => openPageOverlay('whyPartnerOverlay'));
+
+  document.getElementById('seeMoreServicesBtn').addEventListener('click', () => openPageOverlay('allServicesOverlay'));
+
+  document.getElementById('newsletterOpenBtn').addEventListener('click', () => openPageOverlay('newsletterFormOverlay'));
+
+  const offerFlatGrid = document.getElementById('offerFlatGrid');
+  const allBulletsFlat = services.flatMap(s => s.list);
+  allBulletsFlat.forEach(item => {
+    const btn = document.createElement('button');
+    btn.textContent = item;
+    btn.addEventListener('click', () => {
+      const subject = encodeURIComponent(`Inquiry: ${item} — R ROBIN.COM`);
+      const body = encodeURIComponent(`Hi R ROBIN.COM,\n\nI'd like to talk about "${item}".\n\nThanks!`);
+      window.location.href = `mailto:${INQUIRY_EMAIL}?subject=${subject}&body=${body}`;
+    });
+    offerFlatGrid.appendChild(btn);
+  });
+
+  const allServicesGrid = document.getElementById('allServicesGrid');
+  services.forEach(s => {
+    const cat = document.createElement('div');
+    cat.className = 'all-services-cat';
+    cat.innerHTML = `<h4>${s.title}</h4><ul>${s.list.map(item => `<li><button data-item="${item.replace(/"/g, '&quot;')}">${item}</button></li>`).join('')}</ul>`;
+    allServicesGrid.appendChild(cat);
+  });
+  allServicesGrid.querySelectorAll('button[data-item]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.getAttribute('data-item');
+      const subject = encodeURIComponent(`Inquiry: ${item} — R ROBIN.COM`);
+      const body = encodeURIComponent(`Hi R ROBIN.COM,\n\nI'd like to talk about "${item}".\n\nThanks!`);
+      window.location.href = `mailto:${INQUIRY_EMAIL}?subject=${subject}&body=${body}`;
+    });
+  });
+
+  const nfInterests = document.getElementById('nfInterests');
+  const selectedInterests = new Set();
+  services.forEach(s => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'nf-chip';
+    chip.textContent = s.title;
+    chip.addEventListener('click', () => {
+      chip.classList.toggle('selected');
+      if (selectedInterests.has(s.title)) selectedInterests.delete(s.title);
+      else selectedInterests.add(s.title);
+    });
+    nfInterests.appendChild(chip);
+  });
+
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnjkwdyr"; // weka link yako halisi ya Formspree hapa
+
+  const newsletterForm = document.getElementById('newsletterForm');
+  const nfSubmitBtn = document.getElementById('nfSubmitBtn');
+  const nfStatus = document.getElementById('nfStatus');
+
+  newsletterForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const commsConsent = document.getElementById('nfConsentComms').checked;
+    const newsletterConsent = document.getElementById('nfConsentNewsletter').checked;
+
+    const payload = {
+      firstName: document.getElementById('nfFirstName').value.trim(),
+      lastName: document.getElementById('nfLastName').value.trim(),
+      mobile: document.getElementById('nfMobile').value.trim(),
+      email: document.getElementById('nfEmail').value.trim(),
+      interests: Array.from(selectedInterests).join(', '),
+      agreesToOtherCommunication: commsConsent ? 'Yes' : 'No',
+      agreesToNewsletter: newsletterConsent ? 'Yes' : 'No'
+    };
+
+    nfSubmitBtn.disabled = true;
+    nfSubmitBtn.textContent = 'Submitting...';
+    nfStatus.textContent = '';
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        nfStatus.style.color = 'var(--accent)';
+        nfStatus.textContent = "Thanks — you're on the list!";
+        newsletterForm.reset();
+        selectedInterests.clear();
+        nfInterests.querySelectorAll('.nf-chip.selected').forEach(c => c.classList.remove('selected'));
+      } else {
+        nfStatus.style.color = '#c0392b';
+        nfStatus.textContent = 'Something went wrong — please try again.';
+      }
+    } catch (err) {
+      nfStatus.style.color = '#c0392b';
+      nfStatus.textContent = 'Network error — please try again.';
+    }
+
+    nfSubmitBtn.disabled = false;
+    nfSubmitBtn.textContent = 'Submit';
+  });
+</script>
+
+<button id="cw-launcher" aria-label="Open chat">
+  <svg class="cw-chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+  </svg>
+  <svg class="cw-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+</button>
+
+<div id="cw-panel">
+  <div id="cw-header">
+    <div>
+      <div id="cw-header-title">Chat with R ROBIN.COM</div>
+      <div id="cw-header-sub">Usually replies in a few seconds</div>
+    </div>
+    <button id="cw-panel-close" aria-label="Close chat">&times;</button>
+  </div>
+  <div id="cw-messages"></div>
+  <div id="cw-inputbar">
+    <textarea id="cw-input" rows="1" placeholder="Type a message…"></textarea>
+    <button id="cw-send" aria-label="Send">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function () {
+  // key's exposed client-side, fine for now but swap to a proxy before this gets real traffic
+  const OPENROUTER_API_KEY = "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";
+
+  const MODEL_CHAIN = [
+    "openrouter/free",
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "openai/gpt-oss-120b:free",
+    "qwen/qwen3-coder:free"
+  ];
+
+  const SYSTEM_PROMPT = "You are the friendly assistant embedded on R ROBIN.COM, a tech & business services collective. Help visitors with questions about the site and its services, and keep answers concise and conversational. If someone wants to make a formal inquiry, suggest they use the 'Start a project' button or the contact link.";
+
+  const history = [{ role: "system", content: SYSTEM_PROMPT }];
+
+  const launcher = document.getElementById("cw-launcher");
+  const panel = document.getElementById("cw-panel");
+  const panelClose = document.getElementById("cw-panel-close");
+  const messagesEl = document.getElementById("cw-messages");
+  const input = document.getElementById("cw-input");
+  const sendBtn = document.getElementById("cw-send");
+
+  let greeted = false;
+
+  function openPanel() {
+    panel.classList.add("cw-open");
+    launcher.classList.add("cw-active");
+    input.focus();
+    if (!greeted) {
+      greeted = true;
+      addMessage("Hi! What can I help you with?", "bot");
+    }
+  }
+  function closePanel() {
+    panel.classList.remove("cw-open");
+    launcher.classList.remove("cw-active");
+  }
+  launcher.addEventListener("click", () => {
+    panel.classList.contains("cw-open") ? closePanel() : openPanel();
+  });
+  panelClose.addEventListener("click", closePanel);
+
+  function addMessage(text, role, opts) {
+    opts = opts || {};
+    const div = document.createElement("div");
+    div.className = "cw-msg " + (role === "user" ? "user" : "bot") +
+      (opts.typing ? " cw-typing" : "") + (opts.error ? " cw-error" : "");
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  input.addEventListener("input", () => {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 90) + "px";
+  });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
+  });
+  sendBtn.addEventListener("click", send);
+
+  async function callModel(model, messages) {
+    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + OPENROUTER_API_KEY,
+        "HTTP-Referer": window.location.origin,
+        "X-Title": "R ROBIN.COM Chat Widget"
+      },
+      body: JSON.stringify({ model, messages })
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      throw new Error("HTTP " + res.status + " " + body);
+    }
+    const data = await res.json();
+    const reply = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+    if (!reply) throw new Error("Empty response");
+    return reply;
+  }
+
+  async function getReply(messages) {
+    let lastErr;
+    for (const model of MODEL_CHAIN) {
+      try {
+        return await callModel(model, messages);
+      } catch (err) {
+        lastErr = err;
+        console.warn("Model failed, trying next:", model, err);
+      }
+    }
+    throw lastErr || new Error("All models failed");
+  }
+
+  async function send() {
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = "";
+    input.style.height = "auto";
+    sendBtn.disabled = true;
+
+    addMessage(text, "user");
+    history.push({ role: "user", content: text });
+
+    const typingEl = addMessage("Typing…", "bot", { typing: true });
+
+    try {
+      const reply = await getReply(history);
+      typingEl.remove();
+      addMessage(reply, "bot");
+      history.push({ role: "assistant", content: reply });
+    } catch (err) {
+      typingEl.remove();
+      addMessage("Sorry, I couldn't get a response just now. Please try again in a moment.", "bot", { error: true });
+      console.error(err);
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+})();
+</script>
+
+</body>
+</html>

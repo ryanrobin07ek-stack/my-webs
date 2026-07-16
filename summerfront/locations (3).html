@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Locations — Summer Front</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF6EA; --ink:#16241C; --lime:#B7CC3B; --teal:#1F5C56; --coral:#FF6B4A;
+    --line:#E4DCC6; --white:#FFFFFF; --radius:14px; --shadow:0 10px 30px rgba(22,36,28,0.10);
+    --serif:'Fraunces', serif; --sans:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ font-family:var(--sans); background:var(--cream); color:var(--ink); line-height:1.5; -webkit-font-smoothing:antialiased;}
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  h1,h2,h3{font-family:var(--serif); font-weight:600; letter-spacing:-0.01em;}
+  .eyebrow{font-family:var(--sans); font-weight:700; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--teal);}
+
+  /* Nav bar */
+  header{ position:sticky; top:0; z-index:50; background:rgba(251,246,234,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1180px; margin:0 auto;}
+  .logo{font-family:var(--serif); font-weight:700; font-size:22px; display:flex; align-items:center; gap:8px;}
+  .logo .dot{width:10px; height:10px; border-radius:50%; background:var(--coral); display:inline-block;}
+  .nav-links{display:flex; gap:30px; align-items:center;}
+  .nav-links a{font-size:14.5px; font-weight:600; color:var(--ink); opacity:0.8; transition:opacity .15s;}
+  .nav-links a:hover{opacity:1;}
+  .nav-links a.active{color:var(--teal); opacity:1;}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 22px; border-radius:999px; font-weight:700; font-size:14px; border:1.5px solid transparent; transition:transform .15s ease, box-shadow .15s ease;}
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:var(--ink); color:var(--white);}
+  .btn-primary:hover{box-shadow:0 6px 18px rgba(22,36,28,0.28);}
+  .btn-coral{background:var(--coral); color:var(--white);}
+  .btn-coral:hover{box-shadow:0 6px 18px rgba(255,107,74,0.4);}
+  .btn-outline{background:transparent; color:var(--ink); border-color:var(--ink);}
+  .btn-outline:hover{background:var(--ink); color:var(--white);}
+  .btn-sm{padding:8px 16px; font-size:12px;}
+  .menu-toggle{display:none; background:none; border:none; font-size:24px;}
+
+  /* Page hero */
+  .page-hero{ padding:60px 0 40px; text-align:center;}
+  .page-hero h1{ font-size:clamp(34px,5vw,54px); margin:14px 0 16px;}
+  .page-hero p{ font-size:17px; opacity:0.8; max-width:560px; margin:0 auto 30px;}
+
+  /* Search + filter controls */
+  .search-suite{ background:var(--white); border-radius:20px; border:1px solid var(--line); padding:24px; max-width:800px; margin:0 auto 40px; box-shadow:var(--shadow);}
+  .search-input-wrap{ position:relative; margin-bottom:20px;}
+  .search-input-wrap input{ width:100%; padding:16px 20px 16px 50px; border-radius:12px; border:1.5px solid var(--line); font-size:16px; font-family:var(--sans); background:var(--cream); outline:none; transition:border-color 0.2s;}
+  .search-input-wrap input:focus{ border-color:var(--teal);}
+  .search-input-wrap::before{ content:"🔍"; position:absolute; left:20px; top:18px; font-size:18px; opacity:0.6;}
+  
+  .filter-tabs{ display:flex; justify-content:center; gap:10px; flex-wrap:wrap;}
+  .filter-tab{ background:var(--cream); border:1.5px solid var(--line); border-radius:999px; padding:8px 18px; font-weight:600; font-size:13.5px; transition:all 0.2s; color:var(--ink);}
+  .filter-tab.active{ background:var(--teal); color:var(--white); border-color:var(--teal);}
+
+  /* Split map/grid layout */
+  .locations-layout{ display:grid; grid-template-columns:1.4fr 1fr; gap:30px; margin-bottom:60px;}
+  .list-pane{ display:flex; flex-direction:column; gap:20px;}
+  
+  .loc-card{ background:var(--white); border-radius:18px; border:1px solid var(--line); overflow:hidden; display:flex; flex-direction:column; transition:transform 0.2s, box-shadow 0.2s; cursor:pointer;}
+  .loc-card:hover{ transform:translateY(-2px); box-shadow:var(--shadow);}
+  .loc-card.selected{ border-color:var(--coral); box-shadow:0 0 0 1.5px var(--coral);}
+  
+  .loc-hero-img{ height:140px; width:100%; object-fit:cover; background-color:#eae1cc;}
+  .loc-info{ padding:24px;}
+  .loc-tag{ display:inline-block; font-size:11px; text-transform:uppercase; font-weight:700; letter-spacing:0.04em; background:var(--lime); padding:4px 10px; border-radius:4px; margin-bottom:10px;}
+  .loc-info h3{ font-size:22px; margin-bottom:8px; color:var(--ink);}
+  .loc-info p{ font-size:14px; opacity:0.8; margin-bottom:16px;}
+  
+  .loc-details-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13px; opacity:0.8; margin-bottom:20px; border-top:1px solid var(--cream); padding-top:16px;}
+  .loc-details-row div{ display:flex; align-items:center; gap:8px;}
+  
+  .loc-footer-actions{ display:flex; gap:12px;}
+
+  /* Right Pane: Interactive Detail Map Simulated card */
+  .visual-pane{ position:sticky; top:110px; height:calc(100vh - 150px); min-height:500px; display:flex; flex-direction:column;}
+  .simulated-map{ flex:1; background:#e5e0d0; border-radius:18px; border:1px solid var(--line); overflow:hidden; display:flex; flex-direction:column; position:relative;}
+  
+  /* Styling of simulated grid lines on map */
+  .map-grid-bg{ position:absolute; inset:0; background-image:radial-gradient(rgba(22,36,28,0.15) 1px, transparent 0); background-size:24px 24px; opacity:0.8; z-index:1;}
+  
+  .map-detail-card{ position:absolute; bottom:20px; left:20px; right:20px; background:var(--white); padding:20px; border-radius:14px; border:1.5px solid var(--line); z-index:2; box-shadow:var(--shadow);}
+  .map-detail-card h4{ font-family:var(--serif); font-size:18px; margin-bottom:4px;}
+  .map-detail-card p{ font-size:13px; opacity:0.75; margin-bottom:12px;}
+  
+  .map-pin{ position:absolute; width:44px; height:44px; background:var(--coral); border-radius:50% 50% 50% 0; transform:rotate(-45deg); display:flex; align-items:center; justify-content:center; z-index:2; animation: bounce 1.5s infinite alternate;}
+  .map-pin::after{ content:"🌱"; transform:rotate(45deg); font-size:16px;}
+  @keyframes bounce {
+    0% { transform: translateY(0) rotate(-45deg); }
+    100% { transform: translateY(-10px) rotate(-45deg); }
+  }
+
+  /* Why choose our spots */
+  .section{ padding:60px 0;}
+  .section-head{ text-align:center; max-width:700px; margin:0 auto 45px;}
+  .section-head h2{ font-size:clamp(28px, 3.5vw, 40px); margin-top:10px;}
+  .spot-features{ display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;}
+  .spot-feature{ background:var(--white); border-radius:18px; padding:32px; border:1px solid var(--line); text-align:center;}
+  .spot-feature-icon{ font-size:32px; margin-bottom:16px;}
+  .spot-feature h3{ font-size:20px; margin-bottom:10px;}
+  .spot-feature p{ font-size:14px; opacity:0.8; line-height:1.6;}
+
+  /* Careers banner */
+  .chef-banner{ position:relative; border-radius:24px; height:450px; margin:40px 0 10px; overflow:hidden; display:flex; align-items:center;}
+  .chef-banner img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.65); z-index:1;}
+  .chef-content{ position:relative; z-index:2; max-width:550px; color:var(--white); padding:50px;}
+  .chef-content h2{ font-size:44px; margin-bottom:12px;}
+  .chef-content p{ font-size:16px; opacity:0.9; margin-bottom:24px; line-height:1.6;}
+
+  /* Footer */
+  footer{ padding:60px 0 30px; border-top:1px solid var(--line); margin-top:40px;}
+  .foot-grid{ display:grid; grid-template-columns:1.4fr repeat(3,1fr); gap:30px; margin-bottom:40px;}
+  .foot-col h4{ font-size:13px; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px; opacity:0.6;}
+  .foot-col a, .foot-col p{ display:block; font-size:14px; margin-bottom:10px; opacity:0.8;}
+  .foot-bottom{ display:flex; justify-content:space-between; font-size:13px; opacity:0.55; flex-wrap:wrap; gap:10px;}
+
+  /* Small screen tweaks */
+  @media (max-width:960px){
+    .nav-links{ display:none;}
+    .nav-links.mobile-open{ display:flex; flex-direction:column; position:absolute; top:100%; left:0; right:0; background:var(--cream); padding:20px 28px; border-bottom:1px solid var(--line); box-shadow:var(--shadow); gap:16px; z-index:60;}
+    .menu-toggle{ display:block;}
+    .locations-layout{ grid-template-columns:1fr;}
+    .visual-pane{ display:none;} /* Map hidden on mobile tablets to focus on the scrolling list cards */
+    .spot-features{ grid-template-columns:1fr;}
+  }
+  @media (max-width:600px){
+    .chef-banner{ height:400px; }
+    .chef-content h2{ font-size:32px; }
+    .chef-content{ padding:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo"><span class="dot"></span>Summer Front</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="index.html#catering">Catering</a>
+      <a href="index.html#reserve">Reservations</a>
+      <a href="locations.html" class="active">Locations</a>
+      <a href="careers.html">Careers</a>
+    </div>
+    <button class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open')">☰</button>
+  </nav>
+</header>
+
+<div class="wrap">
+  <section class="page-hero">
+    <span class="eyebrow">Find Summer Front</span>
+    <h1>Our Locations</h1>
+    <p>We are serving clean nutrition and garden goodness across the Coast, Nairobi, and Rift Valley. Tap or search to find your neighborhood spot.</p>
+    
+    <div class="search-suite">
+      <div class="search-input-wrap">
+        <input type="text" id="searchInput" oninput="handleFilter()" placeholder="Search by name, street, mall, station...">
+      </div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="setRegion('all', this)">All Regions</button>
+        <button class="filter-tab" onclick="setRegion('coast', this)">Coast Region</button>
+        <button class="filter-tab" onclick="setRegion('nairobi', this)">Nairobi & Surrounding</button>
+        <button class="filter-tab" onclick="setRegion('rift', this)">Rift Valley & Others</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="locations-layout">
+    
+    <main class="list-pane" id="listPane">
+      </main>
+
+    <aside class="visual-pane">
+      <div class="simulated-map">
+        <div class="map-grid-bg"></div>
+        <div class="map-pin" style="top: 40%; left: 45%;"></div>
+        
+        <div class="map-detail-card">
+          <span class="eyebrow" style="font-size:10px; color:var(--coral);">Currently Inspecting</span>
+          <h4 id="mapFocusName">Select a Spot</h4>
+          <p id="mapFocusDesc">Click any branch to view detailed regional maps, open timings, and fast delivery connections.</p>
+          <div style="display:flex; gap:10px;">
+            <a href="#" id="mapFocusDirections" target="_blank" class="btn btn-primary btn-sm">Google Maps Pin</a>
+            <a href="menu.html" class="btn btn-outline btn-sm">Order Ahead</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <section class="section" style="border-top: 1px solid var(--line);">
+    <div class="section-head">
+      <span class="eyebrow">The Summer Front Experience</span>
+      <h2>Designing Places for Connection</h2>
+      <p>Whether you stop by a service station container or relax in our central hubs, we build our spaces with intent.</p>
+    </div>
+    
+    <div class="spot-features">
+      <div class="spot-feature">
+        <div class="spot-feature-icon">🔌</div>
+        <h3>Eco-Powered Hubs</h3>
+        <p>Our locations integrated into regional stations feature green roofs or run on local solar power to minimize our footprint.</p>
+      </div>
+      <div class="spot-feature">
+        <div class="spot-feature-icon">🌳</div>
+        <h3>Communal Seating</h3>
+        <p>Built with reclaimed local cedar and structural metal, designed to let you chat, meet friends, or work easily.</p>
+      </div>
+      <div class="spot-feature">
+        <div class="spot-feature-icon">🚴</div>
+        <h3>Quick Pick-up Zones</h3>
+        <p>Dedicated shelves and easy exterior entries so courier riders and rapid app orders can swoop in and out seamlessly.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chef-banner">
+    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=1200&q=80" alt="Head Chef Preparing Meal">
+    <div class="chef-content">
+      <h2>Work with us</h2>
+      <p>Want to work in one of our beautiful branches? Our kitchens are lively, clean, and provide fantastic benefits. Come join us!</p>
+      <a href="careers.html" class="btn btn-coral">Work With Us</a>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <div class="logo" style="margin-bottom:10px;"><span class="dot"></span>Summer Front</div>
+        <p>Fresh, seasonal food made for sharing — in the dining room or wherever your event is happening.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Visit</h4>
+        <a href="menu.html">Full Menu</a>
+        <a href="index.html#catering">Catering</a>
+        <a href="index.html#reserve">Reservations</a>
+        <a href="locations.html">Locations</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="menu.html#about">About Us</a>
+        <a href="menu.html#about">Why Choose Us</a>
+        <a href="careers.html">Careers</a>
+        <a href="mailto:rrobinhq@gmail.com">Contact Support</a>
+      </div>
+      <div class="foot-col">
+        <h4>Follow</h4>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Summer Front. All rights reserved.</span>
+      <span>Demo build.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// all the branches
+const LOCATIONS_DATA = [
+  // coast
+  { name: "Haile Selassie", desc: "Located along Haile Selassie Road in the Mombasa CBD.", region: "coast", img: "coast1", hours: "7:00 AM - 9:30 PM", phone: "+254 700 111 001" },
+  { name: "Likoni", desc: "Situated at the Oil Libya Service Station in Likoni, along Ukunda Road.", region: "coast", img: "coast2", hours: "6:30 AM - 10:00 PM", phone: "+254 700 111 002" },
+  { name: "Bamburi", desc: "Found along Old Malindi Road.", region: "coast", img: "coast3", hours: "7:00 AM - 10:00 PM", phone: "+254 700 111 003" },
+  { name: "Nyali", desc: "Located at Shell Links Road near Moyne Drive.", region: "coast", img: "coast4", hours: "7:00 AM - 11:00 PM", phone: "+254 700 111 004" },
+  { name: "Mwembe Tayari", desc: "Located on Mwembe Tayari Road.", region: "coast", img: "coast5", hours: "8:00 AM - 9:00 PM", phone: "+254 700 111 005" },
+  { name: "City Mall", desc: "Situated near the City Mall shopping center.", region: "coast", img: "coast6", hours: "8:00 AM - 10:00 PM", phone: "+254 700 111 006" },
+  { name: "Ola Energy Habari", desc: "Found at the Ola Energy station on Nyerere Avenue.", region: "coast", img: "coast7", hours: "24 Hours Operational", phone: "+254 700 111 007" },
+  { name: "Mtwapa", desc: "Located in the Mtwapa area.", region: "coast", img: "coast8", hours: "7:00 AM - 11:00 PM", phone: "+254 700 111 008" },
+
+  // nairobi + around
+  { name: "TRM", desc: "In TRM located along Thika Road.", region: "nairobi", img: "nbi1", hours: "8:00 AM - 10:30 PM", phone: "+254 700 222 001" },
+  { name: "Garden City", desc: "Located in Garden City Shopping Mall along Thika Road.", region: "nairobi", img: "nbi2", hours: "8:00 AM - 10:00 PM", phone: "+254 700 222 002" },
+  { name: "Two Rivers Mall", desc: "Located at Two Rivers Mall in Gigiri.", region: "nairobi", img: "nbi3", hours: "8:00 AM - 11:00 PM", phone: "+254 700 222 003" },
+  { name: "Union Towers", desc: "Located at Union Towers on Moi Avenue.", region: "nairobi", img: "nbi4", hours: "7:00 AM - 9:30 PM", phone: "+254 700 222 004" },
+  { name: "680", desc: "Situated on Muindi Mbingu Street.", region: "nairobi", img: "nbi5", hours: "7:00 AM - 10:00 PM", phone: "+254 700 222 005" },
+  { name: "Parklands", desc: "Found at the Ola station on Limuru Road.", region: "nairobi", img: "nbi6", hours: "24 Hours Operational", phone: "+254 700 222 006" },
+  { name: "Westlands", desc: "Located at Ola Energy on Ring Road Parklands.", region: "nairobi", img: "nbi7", hours: "7:00 AM - 11:00 PM", phone: "+254 700 222 007" },
+  { name: "Kilimani", desc: "Situated at the Ola Energy station at the corner of Argwings Kodhek Road and Wood Avenue.", region: "nairobi", img: "nbi8", hours: "7:00 AM - 11:00 PM", phone: "+254 700 222 008" },
+  { name: "Junction Mall", desc: "Located in the food court at The Junction Mall on Ngong Road.", region: "nairobi", img: "nbi9", hours: "8:00 AM - 10:00 PM", phone: "+254 700 222 009" },
+  { name: "Ola Ngong Road", desc: "Found at the Ola Energy station on Ngong Road.", region: "nairobi", img: "nbi10", hours: "24 Hours Operational", phone: "+254 700 222 010" },
+  { name: "Valley Arcade", desc: "Located on Gitanga Road.", region: "nairobi", img: "nbi11", hours: "7:00 AM - 10:00 PM", phone: "+254 700 222 011" },
+  { name: "Ridgeways", desc: "Situated at Ridgeways Mall along Kiambu Road.", region: "nairobi", img: "nbi12", hours: "8:00 AM - 10:00 PM", phone: "+254 700 222 012" },
+  { name: "Capital Centre", desc: "Located at Capital Centre along Mombasa Road.", region: "nairobi", img: "nbi13", hours: "8:00 AM - 10:00 PM", phone: "+254 700 222 013" },
+  { name: "Greenspan Mall", desc: "Situated along Manyanja Road in Eastlands.", region: "nairobi", img: "nbi14", hours: "8:00 AM - 9:30 PM", phone: "+254 700 222 014" },
+  { name: "Kitengela", desc: "Located at the Kobil Petrol Station along Namanga Road.", region: "nairobi", img: "nbi15", hours: "7:00 AM - 10:00 PM", phone: "+254 700 222 015" },
+  { name: "Syokimau", desc: "Found on the Syokimau service lane next to Sunflag.", region: "nairobi", img: "nbi16", hours: "7:00 AM - 10:00 PM", phone: "+254 700 222 016" },
+  { name: "Business Bay Square (BBS)", desc: "Located in the BBS Mall in Eastleigh.", region: "nairobi", img: "nbi17", hours: "8:00 AM - 10:00 PM", phone: "+254 700 222 017" },
+  { name: "Lusaka Road", desc: "Found at the Enterprise Road/Lusaka Road intersection.", region: "nairobi", img: "nbi18", hours: "7:00 AM - 9:00 PM", phone: "+254 700 222 018" },
+  { name: "Ngara", desc: "Located on Ngara Road.", region: "nairobi", img: "nbi19", hours: "7:00 AM - 9:30 PM", phone: "+254 700 222 019" },
+  { name: "Ojijo Road", desc: "Situated at the Kobil station on Ojijo Road.", region: "nairobi", img: "nbi20", hours: "24 Hours Operational", phone: "+254 700 222 020" },
+  { name: "GTC Mall", desc: "Located on the first floor of GTC Boutique Mall in Westlands.", region: "nairobi", img: "nbi21", hours: "8:00 AM - 10:30 PM", phone: "+254 700 222 021" },
+
+  // rift valley / other
+  { name: "Nakuru House", desc: "Located along Kenyatta Avenue in Nakuru.", region: "rift", img: "rift1", hours: "7:00 AM - 10:00 PM", phone: "+254 700 333 001" },
+  { name: "Kobil View Point", desc: "Situated in Nakuru.", region: "rift", img: "rift2", hours: "6:00 AM - 11:00 PM", phone: "+254 700 333 002" },
+  { name: "Thika Bazaar", desc: "Located on Kenyatta Highway in Thika.", region: "rift", img: "rift3", hours: "7:30 AM - 9:30 PM", phone: "+254 700 333 003" },
+  { name: "Ananas Mall", desc: "Located in Thika, Kiambu.", region: "rift", img: "rift4", hours: "8:00 AM - 10:00 PM", phone: "+254 700 333 004" }
+];
+
+let activeFilter = 'all';
+let activeRegion = 'all';
+
+function setRegion(region, btnElement) {
+
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btnElement.classList.add('active');
+  
+  activeRegion = region;
+  handleFilter();
+}
+
+function handleFilter() {
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  const listPane = document.getElementById('listPane');
+  
+
+  const matches = LOCATIONS_DATA.filter(loc => {
+    const regionMatches = (activeRegion === 'all' || loc.region === activeRegion);
+    const textMatches = (!query || 
+      loc.name.toLowerCase().includes(query) || 
+      loc.desc.toLowerCase().includes(query)
+    );
+    return regionMatches && textMatches;
+  });
+
+  if (matches.length === 0) {
+    listPane.innerHTML = `
+      <div style="background:var(--white); padding:40px; border-radius:18px; border:1px solid var(--line); text-align:center;">
+        <span style="font-size:32px;">🔍</span>
+        <h3 style="margin:12px 0 6px;">No spots found</h3>
+        <p style="font-size:14px; opacity:0.7;">Try searching for a different area, street name or switch regional tabs.</p>
+      </div>
+    `;
+    return;
+  }
+
+  listPane.innerHTML = matches.map((loc, i) => {
+    let regionTag = "Nairobi Branch";
+    if (loc.region === 'coast') regionTag = "Coast Region";
+    if (loc.region === 'rift') regionTag = "Upcountry Branch";
+
+    // unsplash placeholder imgs
+    const unspSeeds = ["1552566629-a03d6d0212cb", "1554118811-1e0d58224f24", "1501339847302-ac426a4a7cbb", "1498804103079-a6351b050096"];
+    const seed = unspSeeds[i % unspSeeds.length];
+    const imgUrl = `https://images.unsplash.com/photo-${seed}?auto=format&fit=crop&w=600&q=80`;
+
+    return `
+      <div class="loc-card" id="card-${loc.name.replace(/\s+/g, '')}" onclick="focusLocation('${loc.name.replace(/'/g, "\\'")}', '${loc.desc.replace(/'/g, "\\'")}', '${loc.hours}', '${loc.region}')">
+        <img src="${imgUrl}" class="loc-hero-img" alt="${loc.name}">
+        <div class="loc-info">
+          <span class="loc-tag">${regionTag}</span>
+          <h3>${loc.name}</h3>
+          <p>${loc.desc}</p>
+          
+          <div class="loc-details-row">
+            <div>⏱️ <span>${loc.hours}</span></div>
+            <div>📞 <span>${loc.phone}</span></div>
+          </div>
+
+          <div class="loc-footer-actions">
+            <a href="https://www.google.com/maps/search/?api=1&query=Summer+Front+${encodeURIComponent(loc.name)}" target="_blank" class="btn btn-primary btn-sm">Get Directions</a>
+            <a href="menu.html" class="btn btn-outline btn-sm">Order Ahead</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // select first one so the map isn't empty on load
+  if (matches.length > 0) {
+    const first = matches[0];
+    focusLocation(first.name, first.desc, first.hours, first.region, false);
+  }
+}
+
+function focusLocation(name, desc, hours, region, highlightCard = true) {
+
+  document.getElementById('mapFocusName').textContent = name;
+  document.getElementById('mapFocusDesc').textContent = `${desc} Serving fresh from ${hours} daily.`;
+  document.getElementById('mapFocusDirections').href = `https://www.google.com/maps/search/?api=1&query=Summer+Front+${encodeURIComponent(name)}`;
+
+  if (highlightCard) {
+    document.querySelectorAll('.loc-card').forEach(c => c.classList.remove('selected'));
+    const cardEl = document.getElementById(`card-${name.replace(/\s+/g, '')}`);
+    if (cardEl) {
+      cardEl.classList.add('selected');
+    }
+  }
+
+  // fake pin jitter so it doesn't look static
+  const pin = document.querySelector('.map-pin');
+  if (pin) {
+    // just hashing the name into an offset, nothing fancy
+    const offsetLeft = 30 + (name.charCodeAt(0) % 40);
+    const offsetTop = 25 + (name.charCodeAt(1) % 40);
+    pin.style.left = `${offsetLeft}%`;
+    pin.style.top = `${offsetTop}%`;
+  }
+}
+
+window.onload = () => {
+  handleFilter();
+};
+
+// img failed to load -> branded placeholder
+document.addEventListener('error', function(e){
+  const el = e.target;
+  if(el.tagName === 'IMG' && !el.dataset.fallbackApplied){
+    el.dataset.fallbackApplied = 'true';
+    el.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"><rect width="300" height="200" fill="#EFE9D6"/><circle cx="150" cy="85" r="18" fill="#FF6B4A"/><text x="150" y="135" font-family="Inter, sans-serif" font-size="13" fill="#16241C" text-anchor="middle" opacity="0.6">Summer Front</text></svg>'
+    );
+    el.style.objectFit = 'cover';
+  }
+}, true);
+</script>
+<script src="chatbot-widget.js" defer></script>
+</body>
+</html>
